@@ -1,0 +1,66 @@
+
+/* 16x16 Icons
+-------------- */
+
+i.icon16 { background-repeat:no-repeat; height:16px; width:16px; display:inline-block; text-indent:-9999px; text-decoration:none!important; }
+* i.icon16 { text-decoration:none!important; vertical-align:top; margin: 0.1em 0.25em 0 0; background-image: url('../img/systcom-icons.png?1311'); }
+.icon16.loading { background: url('../img/loading16.gif'); }
+.icon16.ff { background-position: -16px 0; }
+.icon16.checkmark { background-position: -32px 0; }
+.icon16.new { background-position: -48px 0; }
+.icon16.spark { background-position: -64px 0; }
+.icon16.download { background-position: -80px 0; }
+.icon16.folder { background-position: -96px 0; }
+.icon16.script { background-position: -112px 0; }
+.icon16.star { background-position: -128px 0; }
+.icon16.star-half { background-position: -240px 0; }
+.icon16.star-empty { background-position: -256px 0; }
+.icon16.star-hover { background-position: -272px 0; }
+.icon16.themes { background-position: -144px 0; }
+.icon16.plugins { background-position: -160px 0; }
+.icon16.bundles { background-position: -176px 0; }
+.icon16.apps { background-position: -192px 0; }
+.icon16.tags { background-position: -208px 0; }
+.icon16.checkmark-bw { background-position: -224px 0; }
+
+.icon16.facebook { background-position: 0 -16px; }
+.icon16.twitter { background-position: -16px -16px; }
+.icon16.habrahabr { background-position: -32px -16px; }
+.icon16.github { background-position: -48px -16px; }
+.icon16.rss { background-position: -64px -16px; }
+.icon16.webasyst { background-position: -80px -16px; }
+.icon16.vk { background-position: -96px -16px; }
+.icon16.phone { background-position: -112px -16px; }
+.icon16.mail { background-position: -128px -16px; }
+.icon16.livejournal { background-position: -144px -16px; }
+.icon16.google { background-position: -160px -16px; }
+.icon16.yandex { background-position: -176px -16px; }
+
+.icon16.lock-bw { background-position: 0px -32px; }
+.icon16.lock-bw-mini { background-position: -16px -32px; }
+.icon16.darr { background-position: -32px -32px; }
+.icon16.up-bw { background-position: -48px -32px; }
+.icon16.down-bw { background-position: -64px -32px; }
+.icon16.up { background-position: -80px -32px; }
+.icon16.down { background-position: -96px -32px; }
+.icon16.upup-bw { background-position: -112px -32px; }
+.icon16.downdown-bw { background-position: -128px -32px; }
+.icon16.upup { background-position: -144px -32px; }
+.icon16.downdown { background-position: -160px -32px; }
+.icon16.new-window { background-position: -176px -32px; }
+.icon16.darr-swampy { background-position: -192px -32px; }
+.icon16.status-green { background-position: -208px -32px; }
+.icon16.status-yellow { background-position: -224px -32px; }
+.icon16.status-red { background-position: -240px -32px; }
+
+.icon16.shopscript { background-position: 0px -48px; }
+
+.icon16.usa { background-position: 0px -80px; }
+.icon16.can { background-position: -16px -80px; }
+.icon16.gbr { background-position: -32px -80px; }
+.icon16.aus { background-position: -48px -80px; }
+.icon16.rus { background-position: -64px -80px; }
+
+i.icon16.userpic20 { background-position: -2px -2px; }
+
+.icon16.overhanging { margin-left: -20px; margin-right: 4px; }
