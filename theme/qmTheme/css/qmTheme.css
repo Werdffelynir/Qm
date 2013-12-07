@@ -313,5 +313,36 @@ color: #E0E0FF;
 
 
 
+/* GENERATOR */
+.form-gener{
+    margin: 15px 0;
+    padding: 5px;
+    background: #E0E0E0;
+    border-radius: 20px;
+    box-shadow: 0 0px 2px #122436;
+}
+.form-gener lable{
+    font-weight: bold;
+}
+.form-gener input[type='text'], .form-gener select, .form-gener input[type='submit']{
+    padding: 5px;
+    width: 250px;
+    background-color: #2C5A85;
+
+    border-top: 1px solid #080808;
+    border-right: 1px solid #080808;
+    border-bottom: 1px solid #122436;
+    border-left: 1px solid #122436;
+
+    color: #FFFFFF;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+}
+.form-gener input[type='submit']{
+    margin-top: 10px;
+    color: #FFFFFF;
+    background-color: #1964a0;
+}
+
+
 
 

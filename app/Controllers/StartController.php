@@ -17,7 +17,6 @@ class StartController extends Controller{
     {
         $this->data["pageTitle"] = QmConf("appName");
 
-
         $this->setСhunk('topMenu','topMenu');
 
         $this->setСhunk('chunkAbout','sideBarAbout');

@@ -9,10 +9,12 @@
 
 class ControllerEdit extends StartController{
 
+    public function actionIndex()
+    {
+        $this->data['title'] = 'Быстрый, простой MVC PHP Framework.';
+        $this->data['content'] = 'Быстрый, простой MVC PHP Framework.';
 
-
-
-
-
+        $this->show('main');
+    }
 
 }
