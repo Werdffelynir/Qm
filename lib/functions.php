@@ -150,6 +150,15 @@ function errorFileExists($file = null)
         exit;
     }
 }
+/** Вызывать сообщение о ошибке */
+function error($titleError, $text = null)
+{
+    if(QmConf('appMode') == "debug")
+    {
+        print(errorStyle('Вызвана ошибка '.$titleError, $text));
+        exit;
+    }
+}
 /** Общий стиль для вывода ошибок */
 function errorStyle($titleError = null, $text)
 {

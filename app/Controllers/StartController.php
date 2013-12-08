@@ -7,7 +7,7 @@ class StartController extends Controller{
         //$this->start();
    // }
 
-    public function init(){
+    public function before(){
         // загрузка метода отображение елементов сайтбара по умолчаию
         $this->start();
     }

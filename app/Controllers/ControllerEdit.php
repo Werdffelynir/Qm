@@ -11,8 +11,36 @@ class ControllerEdit extends StartController{
 
     public function actionIndex()
     {
+        $modelEdit = $this->model("Edit");
+        $menuPage = $modelEdit->getMenu();
+
+
+        $menu = "<ul>";
+        foreach($menuPage as $title)
+            $menu .= "<li><a href=\"edit/page/".$title['id']."\">".$title['title']."</a></li>";
+        $menu .= "</ul>";
+
+
+
         $this->data['title'] = 'Быстрый, простой MVC PHP Framework.';
-        $this->data['content'] = 'Быстрый, простой MVC PHP Framework.';
+        $this->data['content'] = $menu;
+
+        $this->show('main');
+    }
+
+    public function actionCreate()
+    {
+        $this->data['title'] = 'Редактирование:';
+        $this->data['content'] = '$menu';
+
+
+        $this->show('main');
+    }
+
+    public function actionPage()
+    {
+        $this->data['title'] = 'Редактирование:';
+        $this->data['content'] = '$menu';
 
         $this->show('main');
     }

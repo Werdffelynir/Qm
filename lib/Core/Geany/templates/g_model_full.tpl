@@ -6,7 +6,7 @@
  * вам необходимо провести реорганизацию кода
  */
 
-class [[MODELNAME]] extends Model{
+class [[MODELNAME]] extends Model
 {
     public function all()
     {

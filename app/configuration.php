@@ -78,8 +78,10 @@ return array(
     "classesAutoload" => array(
         "autoload"  => false,
         "exclusion" => array(
-            "QmCookie",
-            "QmSession",
+            //"QmCookie",
+            //"QmSession",
+            "QmFunc",
+            "QmUser",
         ),
     ),
 

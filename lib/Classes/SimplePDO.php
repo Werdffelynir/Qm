@@ -59,8 +59,10 @@ class SimplePDO {
 
 
     /**
+     * Базовый метод запросов к базе данных.
      *
-     *
+     * Запросы осуществляються:
+     * <pre>
      * ->query( "INSERT INTO blog (title, article, date) values (:title, :article, :date)",
      *      array(
      *          'title' => $title,
@@ -76,7 +78,7 @@ class SimplePDO {
      *          $date
      *          )
      *      )
-     *
+     * <pre>
      * @param $sql
      * @param array $data
      * @return $this

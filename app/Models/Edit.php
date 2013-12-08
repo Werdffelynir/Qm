@@ -8,9 +8,13 @@
 
 class Edit extends Model
 {
-    public function all()
+
+    public function getMenu()
     {
-        $sql = "SELECT * FROM pages";
-        return $this->db->query($sql)->all();
+        return  $this->getAll("pages", array("id","title"));
     }
+
+
+
+
 }

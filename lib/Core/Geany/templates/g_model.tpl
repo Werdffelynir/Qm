@@ -6,7 +6,7 @@
  * вам необходимо провести реорганизацию кода даного контролера
  */
 
-class [[MODELNAME]] extends Model{
+class [[MODELNAME]] extends Model
 {
     public function all()
     {

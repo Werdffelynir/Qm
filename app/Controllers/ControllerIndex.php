@@ -5,32 +5,42 @@ class ControllerIndex extends StartController
     /* Разрешить распаковывать переданные данные в вид */
     //protected $extracted = true;
 
-    //public function after(){}
+    protected $userId = false;
+    protected $userName = false;
+
+    public function after(){}
 
     public function actionIndex()
     {
         $this->data['title'] = 'Быстрый, простой MVC PHP Framework.';
-        $this->data['content'] = $this->partial('pHome/partialContent');
+        $this->data['content'] = $this->partial('pIndex/partialContent');
 
         $this->show('main');
     }
 
     public function actionLogin()
     {
-        $this->data['title'] = 'Login';
-        $this->data['content'] = $this->partial('pHome/partialLogin');
+        if(!empty($_POST['email'])){
 
+            $users = $this->model("Users");
+            $searchUser = $users->searchUser($_POST['email'], md5($_POST['password']));
 
+            if(!$searchUser)
+                QmFunc::redirect(URL.'/index/login');
 
-        $this->show('main');
+            QmUser::auth($searchUser['id']);
+            QmFunc::redirect(URL.'/index/index');
+        }else{
+            $this->data['title'] = 'Login';
+            $this->data['content'] = $this->partial('pIndex/partialLogin');
+            $this->show('main');
+        }
     }
 
-    public function actionTest()
+    public function actionLogout()
     {
-        echo  'ZZZZZZZZZZZZZZZZZZZZZZZZZZZ actionTest ZZZZZZZZZZZZZZZZZZZZZZZZZZZ';
-        //$this->data['content'] = $this->partial('pHome/partialLogin');
-
-        //$this->show('main');
+        QmUser::unAuth();
+        QmFunc::redirect(URL.'/index/login');
     }
 
 

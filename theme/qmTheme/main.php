@@ -46,7 +46,12 @@
 
                 <div id="Qm_sidebar">
 
-                    <h2 class="sidebartitle suer"><a href="/?index/login">Login</a></h2>
+                    <?php if(QmUser::id()):?>
+                        <h2 class="sidebartitle suer"><a href="/index/logout">LogOut</a></h2>
+                    <?php else:?>
+                        <h2 class="sidebartitle suer"><a href="/index/login">Login</a></h2>
+                    <?php endif;?>
+
 
                     <?php echo $this->chunk['chunkAbout']; ?>
 

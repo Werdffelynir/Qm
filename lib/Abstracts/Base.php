@@ -42,18 +42,17 @@ class Base {
     public function __construct()
     {
         $this->init();
+        $this->beforeLoadClasses();
+        $this->autoloadClasses();
         $this->before();
-
         if(QmConf('defaultLayout'))
             $this->layout = QmConf('defaultLayout');
-
-        $this->autoloadClasses();
-
         $this->after();
     }
     /**
      * Загружаеться самым первым, может используваться для создания неких настроек
      **/
+    public function beforeLoadClasses(){}
     public function init(){}
     /**
      * Загружаеться перед загрузкой подключаемых классов

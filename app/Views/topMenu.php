@@ -9,3 +9,6 @@
 <li <?php echo activeMenu("models"); ?> ><a href="<?=URL?>/models">Models</a></li>
 <li <?php echo activeMenu("views"); ?> ><a href="<?=URL?>/views">Views</a></li>
 <li <?php echo activeMenu("download"); ?> ><a href="<?=URL?>/download">Download</a></li>
+<?php if(QmUser::id()):?>
+    <li <?php echo activeMenu("edit"); ?> ><a href="<?=URL?>/edit">Edit</a></li>
+<?php endif;?>
