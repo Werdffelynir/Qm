@@ -18,10 +18,18 @@ class StartController extends Controller{
         $this->data["pageTitle"] = QmConf("appName");
 
         $this->setСhunk('topMenu','topMenu');
-
         $this->setСhunk('chunkAboutRightFirst','sideBarAbout');
-
         $this->setСhunk('chunkAboutRightMenu','sideBarQuickStart');
+
+        /** Подключение скриптов */
+        $this->registerScript(
+            PATH_APP.'assets'.DS.'jquery'.DS.'jquery-2.0.3.min.js',
+            'jquery'
+        );
+
+        //var_dump($this->scripts);
+        //var_dump(PATH_APP.'assets'.DS.'jquery'.DS.'jquery-2.0.3.min.js');
+
 
         /*
         $this->setVar('rightHello', array(

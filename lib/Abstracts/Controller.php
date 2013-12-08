@@ -240,6 +240,169 @@ abstract class Controller extends Base {
     public function afterRender(){}
 
 
+    /** @var array $scripts - Хранит в массиве все зарегестрированые пути к скриптам */
+    public $scripts = array();
+
+    /** @var array $styles - Хранит в массиве все зарегестрированые пути к файлам стилей */
+    public $styles = array();
+
+
+    /**
+     * $this->registerScript(_path_, name, showIn='header');
+     *
+     * @param  $scriptPath
+     * @param  $name
+     * @param  $showIn        отображения на странице 'header' - в хедере, 'footer' - в футере
+     * @return bool
+     */
+    public function registerScript( $scriptPath, $name, $showIn='header' )
+    {
+        if(file_exists($scriptPath)){
+
+            $this->scripts[] = array(
+                'path' => $scriptPath,
+                'name' => $name,
+                'showIn' => $showIn,
+                'position' => count($this->scripts),
+            );
+        }else{
+            return false;
+        }
+    }
+
+
+    /**
+     * $this->registerStyle(_path_, name, showIn='header');
+     *
+     * @param  $scriptPath
+     * @param  $name
+     * @param  $showIn        отображения на странице 'top' - в хедере, 'footer' - в футере
+     * @return bool
+     */
+    public function registerStyle( $scriptPath, $name, $showIn='header' )
+    {
+        if(file_exists($scriptPath)){
+
+            $this->styles[] = array(
+                'path' => $scriptPath,
+                'name' => $name,
+                'showIn' => $showIn,
+                'position' => count($this->scripts),
+            );
+
+        }else{
+            return false;
+        }
+    }
+
+
+    /**
+     * $this->addScript(name, show);
+     *
+     * @param  $scriptPath
+     * @param  $showIn        отображения на странице 'header' - в хедере, 'footer' - в футере
+     * @return bool
+     */
+    public function addScript( $scriptPath, $showIn='header' )
+    {
+
+    }
+
+
+    /**
+     * $this->addScript(name, position);
+     *
+     * @param  $scriptPath
+     * @param  $showIn        отображения на странице 'header' - в хедере, 'footer' - в футере
+     * @return bool
+     */
+    public function addStyle( $scriptPath, $showIn='header' )
+    {
+
+    }
+
+
+    /**
+     *
+     * $this->showScripts();
+     */
+    public function showScripts()
+    {
+
+    }
+
+
+    /**
+     *
+     * $this->showScripts();
+     */
+    public function showStyles()
+    {
+
+    }
+
+
+    /**
+     *
+     * $this->showScripts();
+     */
+    public function showHeader()
+    {
+        $toHead = $this->showStyles();
+        $toHead .= $this->showScripts();
+        return $toHead;
+    }
+
+    /**
+     *
+     * $this->showScripts();
+     */
+    public function showFooter()
+    {
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /*
         public function setWidget($widgetName)
         {

@@ -3,6 +3,11 @@
     <head>
         <title><?php echo $this->showData("pageTitle"); ?></title>
         <meta charset="utf-8">
+        <?php //echo $this->showScripts(); ?>
+        <?php //echo $this->showStyles(); ?>
+        <?php echo $this->showHeader(); ?>
+
+
         <link rel="stylesheet" type="text/css" media="screen" href="<?=URL_THEME;?>/css/qmTheme.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="<?=URL_THEME;?>/css/systcom-icons.css" />
     </head>
@@ -89,4 +94,8 @@
             </div>
         </div>
     </body>
+
+
+    <?php echo $this->showFooter(); ?>
+
 </html>
