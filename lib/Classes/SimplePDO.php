@@ -52,7 +52,7 @@ class SimplePDO {
      * @param $sql
      * @return mixed Колчество затронутых строк
      */
-    private function exec($sql) {
+    public function exec($sql) {
         $count = $this->dbh->exec($sql);
         return $count;
     }

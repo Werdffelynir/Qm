@@ -419,12 +419,24 @@ abstract class Controller extends Base {
      * между тегов <head>
      *
      * @param string $showIn    Указать позицию вывода 'header' или 'footer'
+     * @param string $scrName   Указать единственый скрипт для вывода, НЕ БЕЗОПАСНЫЙ
      * @return string
      */
-    public function showScripts($showIn='header')
+    public function showScripts($showIn='header', $scrName=false)
     {
         $temp_scr = "";
-        if($showIn == 'header') {
+
+        if($scrName) {
+            foreach( $this->scripts as $scripts){
+                if($scripts['name'] == $scrName ){
+                    $regScriptUrl = substr($scripts['path'], strpos($scripts['path'], QmConf("baseUrl")) + strlen(QmConf("baseUrl")) + 1 ) ;
+                    $regScriptUrl = URL.'/'.str_replace('\\','/',$regScriptUrl);
+                    $temp_scr .= '<script type="text/javascript" src="'.$regScriptUrl.'"></script>'."\n";
+                }
+            }
+            return $temp_scr;
+
+        }elseif($showIn == 'header') {
             foreach( $this->scripts as $scripts){
                 if($scripts['showIn'] == $showIn ){
                     $regScriptUrl = substr($scripts['path'], strpos($scripts['path'], QmConf("baseUrl")) + strlen(QmConf("baseUrl")) + 1 ) ;
@@ -433,8 +445,10 @@ abstract class Controller extends Base {
                 }
             }
             return $temp_scr;
+
         } elseif($showIn == 'footer') {
             foreach( $this->scripts as $scripts){
+
                 if($scripts['showIn'] == $showIn ){
                     $regScriptUrl = substr($scripts['path'], strpos($scripts['path'], QmConf("baseUrl")) + strlen(QmConf("baseUrl")) + 1 ) ;
                     $regScriptUrl = URL.'/'.str_replace('\\','/',$regScriptUrl);
@@ -442,7 +456,12 @@ abstract class Controller extends Base {
                 }
             }
             return $temp_scr;
+
+        } else {
+            return false;
         }
+
+
     }
 
 

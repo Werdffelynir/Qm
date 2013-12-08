@@ -358,5 +358,30 @@ color: #E0E0FF;
 }
 
 
+/* редактор */
+#myNicPanel{
+    width: 100%;
+}
+#myInstanceTitle, #myInstanceContent{
+    background-color: #E0E0E0;
+    padding: 4px;
+    width: 100%;
+    border: 2px dotted #FFF;
+}
+#myInstanceTitle:focus, #myInstanceContent:focus{
+    outline: none;
+    background-color: #E0E0E0;
+    padding: 4px;
+    width: 100%;
+    border: 2px solid #050f18;
+}
 
-
+#textAreaContent{
+    margin-top: 15px;
+    padding: 4px;
+    width: 100%;
+    border: 1px solid #122436;
+}
+#textAreaContent:focus{
+    outline: none;
+}

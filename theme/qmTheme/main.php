@@ -4,7 +4,9 @@
         <title><?php echo $this->showData("pageTitle"); ?></title>
         <meta charset="utf-8">
 
-        <?php echo $this->showScripts(); ?>
+        <?php //echo $this->showScripts('header','nicEdit'); ?>
+        <?php //echo $this->showScripts('header','jquery'); ?>
+<?php echo $this->showScripts('header'); ?>
         <?php //echo $this->showStyles(); ?>
         <?php //echo $this->showHeader(); ?>
 
@@ -95,7 +97,8 @@
             </div>
         </div>
 
-
+        <?php //echo $this->showScripts('footer','nicEdit'); ?>
+        <?php //echo $this->showScripts('footer','jquery'); ?>
         <?php echo $this->showScripts('footer'); ?>
     </body>
 </html>

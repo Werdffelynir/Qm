@@ -15,6 +15,8 @@ class ControllerIndex extends StartController
         $this->data['title'] = 'Быстрый, простой MVC PHP Framework.';
         $this->data['content'] = $this->partial('pIndex/partialContent');
 
+       //$this->addScript('nicEdit');
+
        //$this->addScript('nicEdit', 'footer');
        //$this->addScript(array('nicEdit', 'jquery'), 'footer');
 

@@ -38,10 +38,16 @@ class StartController extends Controller{
             'name'  =>'nicEdit'
         ));
 
-        /** nicEdit.js */
+        /** Тестовый CSS */
         $this->registerStyle(array(
             'path'  => PATH_APP.'assets'.DS.'css'.DS.'test.css',
             'name'  =>'test'
+        ));
+
+        /** script.js */
+        $this->registerScript(array(
+            'path'  => PATH_THEME.'js'.DS.'script.js',
+            'name'  =>'themeScript'
         ));
 
 

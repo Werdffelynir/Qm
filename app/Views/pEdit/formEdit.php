@@ -1,23 +1,24 @@
+<br>
 <div class="former">
-    <p>&nbsp;</p>
-    <form name="" action="http://" method="POST" enctype="multipart/form-data">
+    <form name="" action="<?php echo URL.'/edit/createpagesave'; ?>" method="POST" enctype="multipart/form-data">
 
-        <div><lable>Title</lable>
-            <br/>
-        <input name="name" type="text" value="" placeholder="title" />          </div><br />
+        <div><lable>Заголовок</lable><br/>
+            <input name="title" type="text" value="" />
+        </div><br />
 
-        <div><lable>Category</lable>
+        <div><lable>Категория</lable>
             <br/>
-            <select name="" size="1">
+            <select name="category" size="1">
                 <option value="" selected="selected">Категория</option>
                 <?php foreach($category as $cat): ?>
                     <option value="<?php echo $cat ?>"><?php echo $cat ?></option>
                 <?php endforeach; ?>
-            </select>                                                            </div><br />
+            </select>
+        </div><br />
 
-        <div><lable>Content</lable>
-            <br/>
-        <textarea name="name" placeholder="content" ></textarea>                 </div><br />
+        <div><lable>Содержание</lable><br/>
+        <textarea id="textAreaContent" name="content" ></textarea>
+        </div><br />
 
         <input name="name" type="hidden" value="" />
         <input type="submit" value="Сохранить" />
