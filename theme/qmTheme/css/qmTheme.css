@@ -276,6 +276,20 @@ color: #E0E0FF;
 #footer a:link, #footer a:visited { color: #999999; border-bottom-color: #999999; }
 #footer a:hover, #footer a:active { color: #bbbbbb; border-bottom-color: #bbbbbb; }
 
+/* Forms */
+.former input[type="text"]{
+    padding: 4px 5px;
+    color: #050f18;
+    width: 450px;
+}
+.former input[type="submit"]{}
+.former select{
+    padding: 4px 5px;
+    color: #050f18;
+    width: 200px;
+}
+.former textarea{}
+
 
 
 /*  Content Formated 

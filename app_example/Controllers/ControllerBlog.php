@@ -4,7 +4,7 @@ class ControllerBlog extends StartController
 {
     public function after()
     {
-        //$this->setСhunk('chunkAbout','pControllers/sideBarAbout');
+        //$this->setСhunk('chunkAboutRightFirst','pControllers/sideBarAbout');
     }
 
     public function actionIndex()

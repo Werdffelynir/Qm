@@ -19,9 +19,9 @@ class StartController extends Controller{
 
         $this->setСhunk('topMenu','topMenu');
 
-        $this->setСhunk('chunkAbout','sideBarAbout');
+        $this->setСhunk('chunkAboutRightFirst','sideBarAbout');
 
-        $this->setСhunk('chunkQuickstart','sideBarQuickStart');
+        $this->setСhunk('chunkAboutRightMenu','sideBarQuickStart');
 
         /*
         $this->setVar('rightHello', array(

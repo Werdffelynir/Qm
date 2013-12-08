@@ -4,7 +4,7 @@ class ControllerViews extends StartController
 {
     public function after()
     {
-        $this->setСhunk('chunkAbout','pViews/sideBarAbout');
+        $this->setСhunk('chunkAboutRightFirst','pViews/sideBarAbout');
     }
 
     public function actionIndex()
@@ -19,7 +19,7 @@ class ControllerViews extends StartController
 
     public function actionTest()
     {
-        //$this->setСhunk('chunkAbout','pControllers/chunkAbout');
+        //$this->setСhunk('chunkAboutRightFirst','pControllers/chunkAboutRightFirst');
 
         $this->data['title'] = 'ControllerViews actionTest';
         $this->data['content'] = 'Краткая документация по используванию фреймворка.';

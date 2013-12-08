@@ -53,9 +53,9 @@
                     <?php endif;?>
 
 
-                    <?php echo $this->chunk['chunkAbout']; ?>
+                    <?php echo $this->chunk['chunkAboutRightFirst']; ?>
 
-                    <?php echo $this->chunk['chunkQuickstart']; ?>
+                    <?php echo $this->chunk['chunkAboutRightMenu']; ?>
 
                     <h2 class="sidebartitle">GetSimple Features</h2>
                     <p>This is your sidebar text. Please change me in <em>Theme -&gt; Edit Components</em></p>
