@@ -3,9 +3,10 @@
     <head>
         <title><?php echo $this->showData("pageTitle"); ?></title>
         <meta charset="utf-8">
-        <?php //echo $this->showScripts(); ?>
+
+        <?php echo $this->showScripts(); ?>
         <?php //echo $this->showStyles(); ?>
-        <?php echo $this->showHeader(); ?>
+        <?php //echo $this->showHeader(); ?>
 
 
         <link rel="stylesheet" type="text/css" media="screen" href="<?=URL_THEME;?>/css/qmTheme.css" />
@@ -93,9 +94,8 @@
                 </p>
             </div>
         </div>
+
+
+        <?php echo $this->showScripts('footer'); ?>
     </body>
-
-
-    <?php echo $this->showFooter(); ?>
-
 </html>

@@ -15,9 +15,18 @@ class ControllerIndex extends StartController
         $this->data['title'] = 'Быстрый, простой MVC PHP Framework.';
         $this->data['content'] = $this->partial('pIndex/partialContent');
 
+       //$this->addScript('nicEdit', 'footer');
+       //$this->addScript(array('nicEdit', 'jquery'), 'footer');
 
-        var_dump($this->scripts);
+       //var_dump($this->_scripts);
+       // echo "\n\n";
+       //var_dump($this->scripts);
 
+        //$st = 'E:\__SERVER\domains\qm.loc\app\assets\jquery\jquery-2.0.3.min.js';
+        //$regScriptUrl = substr($st, strpos($st, QmConf("baseUrl")) + strlen(QmConf("baseUrl")) + 1 ) ;
+        //$regScriptUrl = URL.'/'.str_replace('\\','/',$regScriptUrl);
+
+        //var_dump($regScriptUrl);
         $this->show('main');
     }
 

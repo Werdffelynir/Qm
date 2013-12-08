@@ -8,24 +8,49 @@ class StartController extends Controller{
    // }
 
     public function before(){
-        // загрузка метода отображение елементов сайтбара по умолчаию
+        /** загрузка метода отображение елементов сайтбара и других повторяющехся
+         * елементов по умолчаию */
         $this->start();
     }
 
 
     public function start()
     {
+        /** Назначение имени страницы по умолчанию */
         $this->data["pageTitle"] = QmConf("appName");
 
+
+        /** Резервирование Чанков */
         $this->setСhunk('topMenu','topMenu');
         $this->setСhunk('chunkAboutRightFirst','sideBarAbout');
         $this->setСhunk('chunkAboutRightMenu','sideBarQuickStart');
 
-        /** Подключение скриптов */
-        $this->registerScript(
-            PATH_APP.'assets'.DS.'jquery'.DS.'jquery-2.0.3.min.js',
-            'jquery'
-        );
+
+        /** Регистрация скриптов ************ */
+        /** jquery-2.0.3 */
+        $this->registerScript(array(
+            'path'  => PATH_APP.'assets'.DS.'jquery'.DS.'jquery-2.0.3.min.js',
+            'name'  =>'jquery'
+        ));
+        /** nicEdit.js */
+        $this->registerScript(array(
+            'path'  => PATH_APP.'assets'.DS.'nicEdit'.DS.'nicEdit.js',
+            'name'  =>'nicEdit'
+        ));
+
+        /** nicEdit.js */
+        $this->registerStyle(array(
+            'path'  => PATH_APP.'assets'.DS.'css'.DS.'test.css',
+            'name'  =>'test'
+        ));
+
+
+        /** Добавление скрипта к всем возможным страницам при услови наследования данного контролера. */
+        $this->addScript('jquery');
+        $this->addStyle('test');
+
+
+
 
         //var_dump($this->scripts);
         //var_dump(PATH_APP.'assets'.DS.'jquery'.DS.'jquery-2.0.3.min.js');

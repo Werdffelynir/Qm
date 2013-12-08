@@ -9,8 +9,17 @@
 
 class ControllerEdit extends StartController{
 
+
+    public function before(){
+        parent::before();
+
+    }
+
     public function after()
     {
+
+
+
         $this->data["pageTitle"] = "Edit Docs";
         $this->setСhunk('chunkAboutRightFirst','pEdit/chunkAboutRightFirst');
 
@@ -43,6 +52,11 @@ class ControllerEdit extends StartController{
 */
     public function actionCreatePage()
     {
+        $this->addScript('jquery', 'disabled');
+
+        //var_dump($this->scripts);
+        //$this->addScript('nicEdit', 'footer');
+
         $formEdit = $this->partial('pEdit/formEdit',  array(
             'category'=>array('Home','Documentation','Controllers','Models','Views','Structure','Quick start','Download' )
         ));
