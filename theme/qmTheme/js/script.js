@@ -1,11 +1,4 @@
 
-/** Включение визуального редактора
- * Отображаеться на страницах:
- * edit/
- * */
-//bkLib.onDomLoaded(function() {
-//    new nicEditor().panelInstance('textAreaContent');
-//});
 
 /** Приминение к всем елементам с классом confirm стандартного диалогового окна */
 $(function() {

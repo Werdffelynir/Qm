@@ -385,3 +385,17 @@ color: #E0E0FF;
 #textAreaContent:focus{
     outline: none;
 }
+
+
+
+
+
+/** Кнопки и другие мелкие детали */
+a.btn-delete{
+    color: #c12e2a;
+    font-weight: bold;
+}
+a.btn-edit{
+     color: #122436;
+     font-weight: bold;
+ }

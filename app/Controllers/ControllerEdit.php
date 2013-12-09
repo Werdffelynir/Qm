@@ -40,8 +40,6 @@ class ControllerEdit extends StartController{
         $this->addScript('jquery');
         $this->addScript('themeScript');
 
-
-
         //var_dump($this->styles);
 
         $this->data['title'] = 'Список всех сатей!';
@@ -60,8 +58,8 @@ class ControllerEdit extends StartController{
         $this->addScript('jquery', 'disabled');
 
         // Подключение в футере 'nicEdit', 'themeScript'
-        $this->addScript('nicEdit', 'footer');
-        $this->addScript('themeScript', 'footer');
+        $this->addScript('nicEdit', 'header');
+        $this->addScript('themeScript', 'header');
 
         // Импорт части вида в общий контент, тут я просто перечесляю необходимые мне катгории.
         $formEdit = $this->partial('pEdit/formEdit',  array(
@@ -117,6 +115,16 @@ class ControllerEdit extends StartController{
         $this->show('main');
     }
 
+    public function actionDeletePage()
+    {
+        $result = $this->modelEdit->deletePage($this->urlParam());
+        if($result)
+            QmFunc::redirect(URL.'/edit');
+        else
+            QmFunc::redirect(URL.'/edit/createpage');
+
+        $this->show('main');
+    }
 
 
 

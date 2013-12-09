@@ -24,3 +24,8 @@
         <input type="submit" value="Сохранить" />
     </form>
 </div>
+<script type="text/javascript">
+    bkLib.onDomLoaded(function() {
+        new nicEditor().panelInstance('textAreaContent');
+    });
+</script>

@@ -35,4 +35,10 @@ class Edit extends Model
 
     }
 
+    public function deletePage($id)
+    {
+        $deleteResult = $this->db->query("DELETE FROM pages WHERE id=:id", array("id"=>$id));
+        return $deleteResult;
+    }
+
 }
