@@ -11,8 +11,8 @@
         <?php //echo $this->showHeader(); ?>
 
 
-        <link rel="stylesheet" type="text/css" media="screen" href="<?=URL_THEME;?>/css/qmTheme.css" />
-        <link rel="stylesheet" type="text/css" media="screen" href="<?=URL_THEME;?>/css/systcom-icons.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="<?=URL_THEME;?>css/qmTheme.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="<?=URL_THEME;?>css/systcom-icons.css" />
     </head>
     <body>
         <div id="Qm_wrapper">
