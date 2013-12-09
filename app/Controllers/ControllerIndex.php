@@ -29,6 +29,11 @@ class ControllerIndex extends StartController
         //$regScriptUrl = URL.'/'.str_replace('\\','/',$regScriptUrl);
 
         //var_dump($regScriptUrl);
+
+
+
+
+
         $this->show('main');
     }
 

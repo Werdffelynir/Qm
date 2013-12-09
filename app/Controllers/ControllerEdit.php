@@ -100,9 +100,12 @@ class ControllerEdit extends StartController{
     public function actionPage()
     {
 
+        //var_dump();
+
+        $cont = 'Page id: '. $this->urlParam('edit', 1); //App::$requestFull[1];
 
         $this->data['title'] = 'Редактирование:';
-        $this->data['content'] = '$menu';
+        $this->data['content'] = $cont;
 
         $this->show('main');
     }

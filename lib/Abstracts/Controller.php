@@ -504,4 +504,45 @@ abstract class Controller extends Base {
         return $toHead;
     }
 
+
+    /**
+     * Метод использования передаваемых парметров через строку запросов.
+     * основное предназначение это передача неких параметров, но все же
+     * можно найти множество других приминений для этого метода.
+     *
+     * <pre>
+     * Например: http://qm.loc/edit/page/id/215/article/sun-light
+     * /edit/page/ - это контролер и екшен, они пропускаються
+     * $this->urlParam()            - id
+     * $this->urlParam('id')        - 215
+     * $this->urlParam('article')   - sun-light
+     * $this->urlParam('allArray')  - масив всех елементов "Array ( [1] => edit [2] => page [3] => id [4] => 215 [5]..."
+     * $this->urlParam('allString') - строку всех елеметов "edit/page/id/215/article/sun-light"
+     * $this->urlParam('edit', 3)   - 215 (3 шага от 'edit')
+     *
+     * </pre>
+     * @param bool $param
+     * @param int $el
+     * @return array|string
+     */
+    public function urlParam($param=false, $el=1)
+    {
+        if(!$param) {
+            return App::$requestFull[3];
+        }elseif($param == 'allArray'){
+            return App::$requestFull;
+        }elseif($param == 'allString'){
+            return App::$request;
+        }else{
+            $paramTemp = substr(App::$request, strpos(App::$request, $param)+strlen($param)+1);
+            $paramTemp = explode('/', $paramTemp);
+
+            if($el > 0)
+                return $paramTemp[$el-1];
+            else
+                return $param;
+        }
+
+
+    }
 }
