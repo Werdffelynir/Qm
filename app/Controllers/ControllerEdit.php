@@ -36,6 +36,13 @@ class ControllerEdit extends StartController{
 
     public function actionIndex()
     {
+        /** подключение скриптов на главной странице она же список всех страниц имеющихся */
+        $this->addScript('jquery');
+        $this->addScript('themeScript');
+
+
+
+        //var_dump($this->styles);
 
         $this->data['title'] = 'Список всех сатей!';
         $allPages = $this->modelEdit->getPages();

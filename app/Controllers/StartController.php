@@ -27,21 +27,34 @@ class StartController extends Controller{
 
 
         /** Регистрация скриптов ************ */
-        /** jquery-2.0.3 */
+        /** jquery-2.0.3
         $this->registerScript(array(
             'path'  => PATH_APP.'assets'.DS.'jquery'.DS.'jquery-2.0.3.min.js',
             'name'  =>'jquery'
-        ));
-        /** nicEdit.js */
+        ));*/
+        /** nicEdit.js
         $this->registerScript(array(
             'path'  => PATH_APP.'assets'.DS.'nicEdit'.DS.'nicEdit.js',
             'name'  =>'nicEdit'
-        ));
+        ));*/
 
-        /** Тестовый CSS */
+        /** Тестовый CSS
         $this->registerStyle(array(
             'path'  => PATH_APP.'assets'.DS.'css'.DS.'test.css',
             'name'  =>'test'
+        ));*/
+
+
+        /** jquery-2.0.3*/
+        $this->registerScript(array(
+            'path'  => PATH_THEME.'js'.DS.'jquery-1.7.0.js',
+            'name'  =>'jquery'
+        ));
+
+        /** nicEdit.js*/
+        $this->registerScript(array(
+            'path'  => PATH_THEME.'js'.DS.'nicEdit.js',
+            'name'  =>'nicEdit'
         ));
 
         /** script.js */
@@ -52,10 +65,8 @@ class StartController extends Controller{
 
 
         /** Добавление скрипта к всем возможным страницам при услови наследования данного контролера. */
-        $this->addScript('jquery');
-        $this->addStyle('test');
-
-
+        //$this->addScript('jquery');
+        //$this->addStyle('test');
 
 
         //var_dump($this->scripts);

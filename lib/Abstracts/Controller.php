@@ -383,12 +383,16 @@ abstract class Controller extends Base {
     public function addStyle( $regStyleName, $disabled=false )
     {
         if(is_string($regStyleName)){
+
+
+
             foreach($this->_styles as $_styles){
                 if($_styles['name'] == $regStyleName){
-                    if( $disabled == 'disabled')
+                    if( $disabled == 'disabled'){
                         unset($this->styles[$regStyleName]);
-                    else
+                    } else {
                         $this->styles[$regStyleName] = $_styles;
+                    }
                 }
             }
         }elseif(is_array($regStyleName)){
@@ -418,9 +422,9 @@ abstract class Controller extends Base {
      * echo $this->showScripts();
      * между тегов <head>
      *
-     * @param string $showIn    Указать позицию вывода 'header' или 'footer'
-     * @param string $scrName   Указать единственый скрипт для вывода, НЕ БЕЗОПАСНЫЙ
-     * @return string
+     * @param string $showIn
+     * @param bool $scrName
+     * @return bool|string
      */
     public function showScripts($showIn='header', $scrName=false)
     {
@@ -483,6 +487,7 @@ abstract class Controller extends Base {
             $temp_scr = "";
             foreach( $this->styles as $styles){
                 $regStyleUrl = substr($styles['path'], strpos($styles['path'], QmConf("baseUrl")) + strlen(QmConf("baseUrl")) + 1 ) ;
+
                 $regStyleUrl = URL.'/'.str_replace('\\','/',$regStyleUrl);
                 $temp_scr .= '<link rel="stylesheet" type="text/css" href="'.$regStyleUrl.'" />'."\n";
             }

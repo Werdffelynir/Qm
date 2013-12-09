@@ -7,7 +7,7 @@
         <?php //echo $this->showScripts('header','nicEdit'); ?>
         <?php //echo $this->showScripts('header','jquery'); ?>
 <?php echo $this->showScripts('header'); ?>
-        <?php //echo $this->showStyles(); ?>
+<?php echo $this->showStyles(); ?>
         <?php //echo $this->showHeader(); ?>
 
 
