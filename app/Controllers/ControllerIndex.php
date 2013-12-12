@@ -15,6 +15,12 @@ class ControllerIndex extends StartController
         $this->data['title'] = 'Быстрый, простой MVC PHP Framework.';
         $this->data['content'] = $this->partial('pIndex/partialContent');
 
+        $jsA = App::createObj('classes/class/jopa/QmJS');
+
+        var_dump($jsA);
+
+
+
        //$this->addScript('nicEdit');
 
        //$this->addScript('nicEdit', 'footer');

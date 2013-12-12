@@ -254,4 +254,24 @@ class App {
         }
     }
 
+
+
+    public static function createObj($classPath, $include=false)
+    {
+        if (file_exists(PATH_APP. $classPath . '.php')) {
+
+            if($classPosition = strrpos("/", $classPath)){
+                $className = substr($classPath, $classPosition+strlen($classPosition));
+            }
+var_dump(strripos('classes/QmJS', '/'));
+            //if($include)
+                //include PATH_APP. $classPath . '.php';
+
+            //return new $classPath();
+        } else {
+            return false;
+        }
+    }
+
+
 }

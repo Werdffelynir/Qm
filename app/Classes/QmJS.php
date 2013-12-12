@@ -72,7 +72,7 @@ class QmJS {
      * @param $functions
      * @return string
      */
-    function formAJAX($idForm, $url, $functions){
+    public static function formAJAX($idForm, $url, $functions){
         $javascript = '
         <script type="text/javascript">
                 $("#'.$idForm.'").submit(function () {
