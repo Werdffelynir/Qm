@@ -263,15 +263,14 @@ class App {
             if($classPosition = strrpos("/", $classPath)){
                 $className = substr($classPath, $classPosition+strlen($classPosition));
             }
-var_dump(strripos('classes/QmJS', '/'));
-            //if($include)
-                //include PATH_APP. $classPath . '.php';
 
-            //return new $classPath();
+            //var_dump(strripos('classes/QmJS', '/'));
+            if($include)
+                include PATH_APP. $classPath . '.php';
+
+            return new $classPath();
         } else {
             return false;
         }
     }
-
-
 }

@@ -3,8 +3,8 @@
 <head>
     <title></title>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" media="screen" href="<?=URL_THEME;?>/css/qmTheme.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="<?=URL_THEME;?>/css/systcom-icons.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="<?=URL;?>/lib/Core/Geany/theme/css/qmTheme.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="<?=URL;?>/lib/Core/Geany/theme/css/systcom-icons.css" />
 </head>
 <body>
 <div id="Qm_wrapper">
