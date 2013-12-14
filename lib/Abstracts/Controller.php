@@ -547,7 +547,5 @@ abstract class Controller extends Base {
             else
                 return $param;
         }
-
-
     }
 }
