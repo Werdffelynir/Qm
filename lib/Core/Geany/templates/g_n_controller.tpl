@@ -29,7 +29,7 @@ class ControllerIndex extends Controller{
         #Code...
     }
 
-    /** Временно хранит имена видов */
+    /** Метод отрабатывает поле загрузки всех классов, в том числе и с каталога "Classes" */
     public function after()
     {
         #Code...

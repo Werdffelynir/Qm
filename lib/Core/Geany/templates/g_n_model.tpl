@@ -3,14 +3,17 @@
 /**
  * Файл был сгенерирован с помощю Geany Qm Framework
  *
- * вам необходимо провести реорганизацию кода даного контролера
+ * Необходимо провести реорганизацию кода даной модели
  */
 
-class [[MODELNAME]] extends Model
+
+class Base extends Model
 {
-    public function all()
+    public function getAll()
     {
         $sql = "SELECT * FROM pages";
         return $this->db->query($sql)->all();
     }
+
+
 }
