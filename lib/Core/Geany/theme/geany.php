@@ -3,8 +3,8 @@
 <head>
     <title></title>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" media="screen" href="<?=URL_THEME;?>/css/qmTheme.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="<?=URL_THEME;?>/css/systcom-icons.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="<?=URL;?>/lib/Core/Geany/theme/main.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="<?=URL;?>/lib/Core/Geany/theme/main.js" />
 </head>
 <body>
 <div id="Qm_wrapper">
@@ -31,6 +31,24 @@
                     все что необходимо в приложении. Но генератор может скоротиль на несколько минут
                     первоначальный этап разработки.</p>
             <?php endif; ?>
+
+
+
+            <?php if(App::$request == "geany/app"): ?>
+
+                <form action="">
+
+                    <input type="text" value="" placeholder="Название каталога" />
+                    <select name="" id="">
+                        <option value="none">Стандартный</option>
+                        <option value="full">Расширеный</option>
+                    </select>
+                    <input type="submit" value="Создать"/>
+
+                </form>
+
+            <?php endif; ?>
+
 
             <?php if(App::$request == "geany/controller"): ?>
 

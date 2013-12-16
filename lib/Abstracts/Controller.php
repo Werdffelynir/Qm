@@ -511,6 +511,21 @@ abstract class Controller extends Base {
 
 
     /**
+     * Мнтод для проверки являеться ли запрос через AJAX
+     * @return bool
+     */
+    public function isAjax()
+    {
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+            strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+
+    /**
      * Метод использования передаваемых парметров через строку запросов.
      * основное предназначение это передача неких параметров, но все же
      * можно найти множество других приминений для этого метода.

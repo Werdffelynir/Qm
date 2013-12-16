@@ -3,8 +3,8 @@
 <head>
     <title></title>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" media="screen" href="<?=URL;?>/lib/Core/Geany/theme/css/qmTheme.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="<?=URL;?>/lib/Core/Geany/theme/css/systcom-icons.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="<?=URL;?>/lib/Core/Geany/theme/main.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="<?=URL;?>/lib/Core/Geany/theme/main.js" />
 </head>
 <body>
 <div id="Qm_wrapper">
@@ -31,6 +31,23 @@
                     все что необходимо в приложении. Но генератор может скоротиль на несколько минут
                     первоначальный этап разработки.</p>
             <?php endif; ?>
+
+
+
+
+            <?php if(App::$request == "geany/app"): ?>
+
+                <h2>Генератор кода: Новое преложение</h2>
+                <?php echo $data['newAppContent']; ?>
+
+                <h2>Генератор кода: Дальнейшие действия</h2>
+                <?php echo $data['newAppContentExists']; ?>
+
+            <?php endif; ?>
+
+
+
+
 
             <?php if(App::$request == "geany/controller"): ?>
 
@@ -65,6 +82,7 @@
             <h2 class="sidebartitle suer"><a href="/geany">Main</a></h2>
             <h2 class="sidebartitle">Что генерировать ?</h2>
             <ul>
+                <li><a href="/geany/app">Application</a></li>
                 <li><a href="/geany/controller">Controller</a></li>
                 <li><a href="/geany/model">Model</a></li>
                 <!--                <li><a href="/geany/structure">Structure</a></li>-->

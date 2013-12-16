@@ -2,10 +2,10 @@
 /**
  * Файл был сгенерирован с помощю Geany Qm Framework
  *
- * вам необходимо провести реорганизацию кода даного контролера
+ * Необходимо провести реорганизацию кода даного контролера
  */
 
-class Controller[[CONTROLLERNAME]] extends [[CONTROLLEREXTENDS]]{
+class ControllerIndex extends Controller{
 
     /** Временно хранит имена видов */
     public $view;
@@ -35,13 +35,26 @@ class Controller[[CONTROLLERNAME]] extends [[CONTROLLEREXTENDS]]{
         #Code...
     }
 
-    /** Временно хранит имена видов */
+    /** "actionIndex" запускаеться по умолчанию и являеться ответом на роут типа 
+    имея_контролера/метод. Все методы с приставкой "action" доступны через роуты
+    и используються в основном для ответов как с видами так и без или для вывода страниц, 
+    ajax ответов. */
     public function actionIndex()
     {
         #Code...
     }
 
     /** Временно хранит имена видов */
+    public function actionAjaxRequest()
+    {
+        if($this->isAjax){
+            $someData = $_POST['someData'];
+            #Code...
+        }
+    }
+
+    /** Методы без приставки "action" не имебт доступу с вне, и используються как 
+    обычные методы. */
     public function myMethod()
     {
         #Code...
