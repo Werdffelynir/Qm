@@ -1,6 +1,6 @@
 <?php
 /**
- * Файл был сгенерирован с помощю Geany Qm Framework
+ * Файл был сгенерирован с помощю Gen Qm Framework
  *
  * Необходимо провести реорганизацию кода даного контролера
  */
@@ -47,7 +47,7 @@ class ControllerIndex extends Controller{
     /** Временно хранит имена видов */
     public function actionAjaxRequest()
     {
-        if($this->isAjax){
+        if($this->isAjax()){
             $someData = $_POST['someData'];
             #Code...
         }

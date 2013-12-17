@@ -3,8 +3,8 @@
 <head>
     <title></title>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" media="screen" href="<?=URL;?>/lib/Core/Geany/theme/main.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="<?=URL;?>/lib/Core/Geany/theme/main.js" />
+    <link rel="stylesheet" type="text/css" media="screen" href="<?=URL;?>/lib/Core/gen/theme/main.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="<?=URL;?>/lib/Core/gen/theme/main.js" />
 </head>
 <body>
 <div id="Qm_wrapper">
@@ -19,10 +19,10 @@
         <!-- OutPut content -->
         <div id="Qm_content">
 
-            <?php if(App::$request == "geany"): ?>
+            <?php if(App::$request == "gen"): ?>
                 <h2>Генератор кода</h2>
 
-                <p>Geny - это небольшей конструктор кода для фреймворка. Все что делает Geny это интим,
+                <p>Gen - это небольшей конструктор кода для фреймворка. Все что делает Geny это интим,
                     ибо производимый им файл являеться лишь каркасом с возможными свойстами и методами
                     которые разработчик будет использывать. Но позволяет бысрее упорядочить структуру
                     вашего нового приложения.</p>
@@ -35,12 +35,11 @@
 
 
 
-            <?php if(App::$request == "geany/app"): ?>
+            <?php if(App::$request == "gen/app"): ?>
 
-                <h2>Генератор кода: Новое преложение</h2>
+                <h2><?php echo $data['newAppContentTitle']; ?></h2>
                 <?php echo $data['newAppContent']; ?>
 
-                <h2>Генератор кода: Дальнейшие действия</h2>
                 <?php echo $data['newAppContentExists']; ?>
 
             <?php endif; ?>
@@ -49,7 +48,7 @@
 
 
 
-            <?php if(App::$request == "geany/controller"): ?>
+            <?php if(App::$request == "gen/controller"): ?>
 
                 <h2>Генератор кода: Контролер</h2>
                 <?php echo $data['controller']; ?>
@@ -59,7 +58,7 @@
 
             <?php endif; ?>
 
-            <?php if(App::$request == "geany/model"): ?>
+            <?php if(App::$request == "gen/model"): ?>
 
                 <h2>Генератор кода: Модель</h2>
                 <?php echo $data['model']; ?>
@@ -69,7 +68,7 @@
 
             <?php endif; ?>
 
-            <?php if(App::$request == "geany/structure"): ?>
+            <?php if(App::$request == "gen/structure"): ?>
 
 
 
@@ -79,13 +78,13 @@
         </div><!--Qm_content-->
 
         <div id="Qm_sidebar">
-            <h2 class="sidebartitle suer"><a href="/geany">Main</a></h2>
+            <h2 class="sidebartitle suer"><a href="/gen">Main</a></h2>
             <h2 class="sidebartitle">Что генерировать ?</h2>
             <ul>
-                <li><a href="/geany/app">Application</a></li>
-                <li><a href="/geany/controller">Controller</a></li>
-                <li><a href="/geany/model">Model</a></li>
-                <!--                <li><a href="/geany/structure">Structure</a></li>-->
+                <li><a href="/gen/app">Application</a></li>
+                <li><a href="/gen/controller">Controller</a></li>
+                <li><a href="/gen/model">Model</a></li>
+                <!--                <li><a href="/gen/structure">Structure</a></li>-->
             </ul>
         </div>
     </div>

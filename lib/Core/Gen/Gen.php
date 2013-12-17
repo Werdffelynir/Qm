@@ -32,10 +32,11 @@
 
 if(!isset($_POST['newAppName']))
 {
-    $newAppContent = '<p>Файлы нового преложения будут созданы в корне фреймворка. Преложение активно после создания не будет, чтобы активировать
-     измениете параметр "pathApp" на имя созданого каталога в конфиг-файле ядара системе (__ROOT__/lib/configuration.php). </p>
+    $newAppTitle = "Генератор кода: Новое преложение";
+    $newAppContent = '<p>Файлы нового преложения будут созданы в корне фреймворка. Чтобы активировать новое преложение
+     измениете параметр "pathApp" на имя созданого каталога в конфиг-файле системы (__ROOT__/lib/configuration.php). </p>
                     <div class="form-gener">
-                <form>
+                <form method="post">
                     <p><lable>Название нового каталога преложения:</lable></p>
                     <p><input name="newAppName" type="text" value="" placeholder="" /></p>
                     <p><lable>Генерация по шаблону:</lable></p>
@@ -49,10 +50,19 @@ if(!isset($_POST['newAppName']))
     ';
     $newAppContentExists = '
     <ul>
-        <li><b>Название нового каталога преложения</b></li>
-        <li><b>Генерация по шаблону</b><ul>
-            <li>Стандартный - базовый скилет преложения, включает все каталоги и демо файлы</li>
-            <li>Расширеный - кроме базового скилета содержит пример преложения на 5 страниц с подключенем к БД и AJAX запросами. </li>
+        <li><b>Название нового каталога преложения</b>
+            <ul>
+                <li>Название каталога, не распространяеться не на какие настройки
+                кроме имени директории где будет создано само преложение.</li>
+                <li>Название не есть окончательным и может быть изменено после создания.</li>
+            </ul>
+        </li>
+        <li><b>Генерация по шаблону</b>
+            <ul>
+                <li>Стандартный - базовый скилет преложения, включает все каталоги и демо файлы</li>
+                <li>Расширеный - кроме базового скилета содержит пример преложения,
+                подключение к БД, AJAX запросы, форма авторизации. </li>
+            </ul>
         </li>
     </ul>';
 }else{
@@ -77,73 +87,73 @@ if(!isset($_POST['newAppName']))
 */
 // Желаемая структура папок
 
-/*
-$newApp = "./my_app/";
+/** Создание каталогов */
+    $newAppName = $_POST['newAppName'];
+    if(is_dir(PATH.$newAppName)){
 
-$structureResult = true;
-$creacteClasses                 = $newApp.'Classes/';
-$creacteControllers             = $newApp.'Controllers/';
-$creacteModels                  = $newApp.'Models/';
-$creacteViews                   = $newApp.'Views/index/';
-$creacteStructureControllers    = $newApp.'Structure/Controllers/';
-$creacteStructureModels         = $newApp.'Structure/Models/';
-$creacteStructureViews          = $newApp.'Structure/Views/';
+        $newAppTitle = "Каталог \"".PATH.$newAppName."\" уже существует!";
+        $newAppContent = '<a href="'.URL.'/gen/app">Пересоздать.</a>';
+    }else{
 
-$fileFunction = 'functions.php';
-$fileBoot     = 'bootstrap.php';
-$fileConfig   = 'configuration.php';
-$fileClasses      = 'QmClasses.php';
-$fileControllers  = 'ControllersIndex.php';
-$fileModels       = 'Base.php';
-$fileView         = 'main.php';
+        $newApp = $newAppName.DS;
 
-$fileContent = "testString";
+        $structureResult = true;
+        $createClasses                 = $newApp.'Classes/';
+        $createControllers             = $newApp.'Controllers/';
+        $createModels                  = $newApp.'Models/';
+        $createViews                   = $newApp.'Views/index/';
+        $createStructureControllers    = $newApp.'Structure/Controllers/';
+        $createStructureModels         = $newApp.'Structure/Models/';
+        $createStructureViews          = $newApp.'Structure/Views/';
 
+        $fileFunction = 'functions.php';
+        $fileBoot     = 'bootstrap.php';
+        $fileConfig   = 'configuration.php';
+        $fileClasses      = 'QmClasses.php';
+        $fileControllers  = 'ControllersIndex.php';
+        $fileModels       = 'Base.php';
+        $fileView         = 'main.php';
 
+        $fileContentFunction  = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_functions.tpl');
+        $fileContentBootstrap = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_bootstrap.tpl');
+        $fileContentConfig = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_configuration.tpl');
+        $fileContentClasses = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_classes.tpl');
+        $fileContentControllers = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_controller.tpl');
+        $fileContentModels = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_model.tpl');
+        $fileContentView = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_view_main.tpl');
 
-if (!mkdir($creacteClasses, 0, true))
-    $structureResult = false;
-if (!mkdir($creacteControllers, 0, true))
-    $structureResult = false;
-if (!mkdir($creacteModels, 0, true))
-    $structureResult = false;
-if (!mkdir($creacteViews, 0, true))
-    $structureResult = false;
-if (!mkdir($creacteStructureControllers, 0, true))
-    $structureResult = false;
-if (!mkdir($creacteStructureModels, 0, true))
-    $structureResult = false;
-if (!mkdir($creacteStructureViews, 0, true))
-    $structureResult = false;
+        if (!mkdir($createClasses, 0, true))
+            $structureResult = false;
+        if (!mkdir($createControllers, 0, true))
+            $structureResult = false;
+        if (!mkdir($createModels, 0, true))
+            $structureResult = false;
+        if (!mkdir($createViews, 0, true))
+            $structureResult = false;
+        if (!mkdir($createStructureControllers, 0, true))
+            $structureResult = false;
+        if (!mkdir($createStructureModels, 0, true))
+            $structureResult = false;
+        if (!mkdir($createStructureViews, 0, true))
+            $structureResult = false;
 
-if($structureResult){
-    file_put_contents($newApp.$fileFunction, $fileContent);
-    file_put_contents($newApp.$fileBoot, $fileContent);
-    file_put_contents($newApp.$fileConfig, $fileContent);
-    file_put_contents($creacteClasses.$fileClasses, $fileContent);
-    file_put_contents($creacteControllers.$fileControllers, $fileContent);
-    file_put_contents($creacteModels.$fileModels, $fileContent);
-    file_put_contents($newApp.'Views/'.$fileView, $fileContent);
-}*/
+        if($structureResult){
+            file_put_contents($newApp.$fileFunction, $fileContentFunction);
+            file_put_contents($newApp.$fileBoot, $fileContentBootstrap);
+            file_put_contents($newApp.$fileConfig, $fileContentConfig);
+            file_put_contents($createClasses.$fileClasses, $fileContentClasses);
+            file_put_contents($createControllers.$fileControllers, $fileContentControllers);
+            file_put_contents($createModels.$fileModels, $fileContentModels);
+            file_put_contents($newApp.'Views/'.$fileView, $fileContentView);
+        }
 
-
-/*
-$file = 'people.txt';
-// Новый человек, которого нужно добавить в файл
-$person = "John Smith\n";
-// Пишем содержимое в файл,
-// используя флаг FILE_APPEND flag для дописывания содержимого в конец файла
-// и флаг LOCK_EX для предотвращения записи данного файла кем-нибудь другим в данное время
-
-*/
-
-
-
-    $newAppContent = '
+        $newAppTitle = "Генератор кода: Новое преложение создано!";
+        $newAppContent = '
     <p>Файлы нового преложения созданы в корне фреймворка. Преложение активно после создания не будет, чтобы активировать
     измениете параметр "pathApp" на имя созданого каталога <b>'.$_POST["newAppName"].'</b> в конфиг-файле ядара системе (__ROOT__/lib/configuration.php). </p>
     ';
-    $newAppContentExists = '
+        $newAppContentExists = '
+        <h2>Генератор кода: Дальнейшие действия</h2>
         <p>Структура преложения преложения</p>
 <pre>
 [new_app_name]
@@ -164,8 +174,13 @@ $person = "John Smith\n";
          [js]
 </pre>
     ';
+    }
+
+
+
 }
 
+$data['newAppContentTitle'] = $newAppTitle;
 $data['newAppContent'] = $newAppContent;
 $data['newAppContentExists'] = $newAppContentExists;
 
@@ -202,7 +217,7 @@ if(isset($_POST['nameController']) AND !empty($_POST['nameController']) )
         if( $_POST['typeController'] == 'full')
             $tpl_controller = 'g_controller_full.tpl';
 
-        $file = file_get_contents(PATH_LIB."Core".DS."Geany".DS.'templates'.DS.$tpl_controller);
+        $file = file_get_contents(PATH_LIB."Core".DS."Gen".DS.'templates'.DS.$tpl_controller);
         $file = str_replace("[[CONTROLLERNAME]]", $nameController, $file);
 
         if(preg_match('|^(.*)\.php$|', $_POST['parentController'], $parentControllerFind)){
@@ -282,7 +297,7 @@ if(isset($_POST['nameModel']) AND !empty($_POST['nameModel']) ){
         if( $_POST['typeModel'] == 'full')
             $tpl_model = 'g_model_full.tpl';
 
-        $file = file_get_contents(PATH_LIB."Core".DS."Geany".DS.'templates'.DS.$tpl_model);
+        $file = file_get_contents(PATH_LIB."Core".DS."Gen".DS.'templates'.DS.$tpl_model);
         $file = str_replace("[[MODELNAME]]", $nameModel, $file);
 
 
@@ -320,4 +335,4 @@ if(isset($_POST['nameModel']) AND !empty($_POST['nameModel']) ){
 $data['model'] = $modelData;
 $data['modelExists'] = '<ul>'.$modelFiles.'</ul>';
 
-include_once PATH_LIB."Core".DS."Geany".DS.'theme'.DS.'main.php';
+include_once PATH_LIB."Core".DS."Gen".DS.'theme'.DS.'main.php';

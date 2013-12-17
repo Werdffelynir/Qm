@@ -96,8 +96,8 @@ class App {
         }
 
         /** Если включен дебагер, и запос идет на генератор кода подключаем его */
-        if($this->config['appMode'] == "debug" AND $url == "geany") {
-            include PATH_LIB."Core".DS."Geany".DS.'geany.php';
+        if($this->config['appMode'] == "debug" AND $url == "gen") {
+            include PATH_LIB."Core".DS."Gen".DS.'Gen.php';
             die();
         }
 

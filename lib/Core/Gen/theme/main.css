@@ -355,8 +355,13 @@ code a{border-bottom: 1px dotted #444444;}
     margin-top: 10px;
     color: #FFFFFF;
     background-color: #1964a0;
+    cursor: pointer;
 }
-
+.form-gener input[type='submit']:hover{
+    margin-top: 10px;
+    color: #FFFFFF;
+    background-color: #505dff;
+}
 
 /* редактор */
 #myNicPanel{

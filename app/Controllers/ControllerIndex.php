@@ -15,9 +15,9 @@ class ControllerIndex extends StartController
         $this->data['title'] = 'Быстрый, простой MVC PHP Framework.';
         $this->data['content'] = $this->partial('pIndex/partialContent');
 
-        $jsA = App::createObj('classes/class/jopa/QmJS');
+        //$jsA = App::createObj('classes/class/jopa/QmJS');
 
-        var_dump($jsA);
+        //var_dump($jsA);
 
 
 
@@ -35,10 +35,6 @@ class ControllerIndex extends StartController
         //$regScriptUrl = URL.'/'.str_replace('\\','/',$regScriptUrl);
 
         //var_dump($regScriptUrl);
-
-
-
-
 
         $this->show('main');
     }
