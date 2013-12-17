@@ -9,17 +9,30 @@
 class Edit extends Model
 {
 
+    /**
+     * Get all pages to realise as main-menu
+     * @return array
+     */
     public function getMenu()
     {
-        return  $this->getAll("pages", array("id","title"));
+        return  $this->getAll("pages", array("id", "title"));
     }
 
+    /**
+     * Get all pages
+     * @return array
+     */
     public function getPages()
     {
         return  $this->getAll("pages");
     }
 
 
+    /**
+     * Save new page
+     * @param array $data
+     * @return $this
+     */
     public function saveNewPage(array $data)
     {
         $saveResult = $this->db->query("INSERT INTO pages (title,category,content,datetime,author) VALUES (:title,:category,:content,:datetime,:author)", array(
@@ -35,6 +48,11 @@ class Edit extends Model
 
     }
 
+    /**
+     * Method delete page
+     * @param $id
+     * @return $this
+     */
     public function deletePage($id)
     {
         $deleteResult = $this->db->query("DELETE FROM pages WHERE id=:id", array("id"=>$id));

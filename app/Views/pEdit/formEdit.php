@@ -3,13 +3,13 @@
     <form name="" action="<?php echo URL.'/edit/createpagesave'; ?>" method="POST" enctype="multipart/form-data">
 
         <div><lable>Заголовок</lable><br/>
-            <input name="title" type="text" value="" />
+            <input name="title" type="text" value="<?php $this->showData("form_title") ?>" />
         </div><br />
 
         <div><lable>Категория</lable>
             <br/>
             <select name="category" size="1">
-                <option value="" selected="selected">Категория</option>
+                <option value="" selected="selected"><?php $this->showData("form_category") ?></option>
                 <?php foreach($category as $cat): ?>
                     <option value="<?php echo $cat ?>"><?php echo $cat ?></option>
                 <?php endforeach; ?>
@@ -17,10 +17,10 @@
         </div><br />
 
         <div><lable>Содержание</lable><br/>
-        <textarea id="textAreaContent" name="content" ></textarea>
+        <textarea id="textAreaContent" name="content" ><?php $this->showData("form_content") ?></textarea>
         </div><br />
 
-        <input name="name" type="hidden" value="" />
+        <input name="id" type="hidden" value="<?php $this->showData("form_title") ?>" />
         <input type="submit" value="Сохранить" />
     </form>
 </div>
