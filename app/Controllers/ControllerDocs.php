@@ -6,26 +6,20 @@
  * Time: 21:19
  */
 
-class ControllerDocs extends StartController
+class ControllerDocs extends BaseSiteController
 {
 
-    protected $extracted = true;
+    protected $extracted = false;
 
     public function actionIndex()
     {
-        /**/
         $this->data["pageTitle"] = "Documentation";
 
-        $content='';
-        $blog = $this->model("Blog");
-        $bResult = $blog->all();
+        $ModelPages = $this->model("Pages");
+        $getCurrent = $ModelPages->getPageByLink('docs');
 
-        foreach($bResult as $b){
-            $content .= $b['content'];
-        }
-
-        $this->data['title'] = 'Title Docs Page';
-        $this->data['content'] = $content;
+        $this->data['title'] = $getCurrent['title'];
+        $this->data['content'] = htmlspecialchars_decode($getCurrent['content']);
 
         $this->show('main');
     }

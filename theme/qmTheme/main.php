@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
     <head>
-        <title><?php echo $this->showData("pageTitle"); ?></title>
+        <title><?php $this->showData("pageTitle"); ?></title>
         <meta charset="utf-8">
 
         <?php //echo $this->showScripts('header','nicEdit'); ?>
@@ -90,7 +90,7 @@
                 <p>Copyright &copy; 1560 &mdash; 2013 SunLight, Inc. All rights reserved.
                 </p>
                 <p> Design by
-                    <a href="http://www.nikhedonia.com/" rel="bookmark" title="SimplyGold">QmPHP Theme OL Werdffelynir</a>.
+                    <a href="http://werd.id1945.com/" rel="bookmark" title="SimplyGold">QmPHP Theme OL Werdffelynir</a>.
                 </p>
                 <p>Работает на QmPHP Framework |  <?php echo 'Сгенерирован за:' .round(microtime(true) - (int)$_SERVER["REQUEST_TIME_FLOAT"], 4). ' сек'; ?>
                 </p>

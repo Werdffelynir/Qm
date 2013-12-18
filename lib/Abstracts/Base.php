@@ -167,7 +167,7 @@ class Base {
         $model = $modelName;
         include PATH_APP."Models".DS.$model.".php";
         $newModel = new $model();
-        return $newModel;
+        return (object) $newModel;
     }
 
 
