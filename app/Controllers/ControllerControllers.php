@@ -1,6 +1,6 @@
 <?php
 
-class ControllerControllers extends StartController
+class ControllerControllers extends BaseSiteController
 {
     public function after()
     {

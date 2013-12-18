@@ -58,6 +58,20 @@ class SimplePDO {
     }
 
 
+
+    public function update($sql, array $data=null) {
+        if(is_null($data)){
+            var_dump($this->sth);
+            $this->sth = $this->dbh->prepare($sql);
+            $result = $this->sth->execute();
+        }else{
+            $this->sth = $this->dbh->prepare($sql);
+            $result = $this->sth->execute($data);
+        }
+        return $result;
+    }
+
+
     /**
      * Базовый метод запросов к базе данных.
      *

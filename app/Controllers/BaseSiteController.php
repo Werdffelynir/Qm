@@ -1,6 +1,6 @@
 <?php
 
-class StartController extends Controller{
+class BaseSiteController extends Controller{
 
    // public function __construct(){
         // загрузка метода отображение елементов сайтбара по умолчаию

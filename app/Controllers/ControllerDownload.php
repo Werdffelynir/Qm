@@ -1,6 +1,6 @@
 <?php
 
-class ControllerDownload extends StartController
+class ControllerDownload extends BaseSiteController
 {
 
     public function actionIndex()

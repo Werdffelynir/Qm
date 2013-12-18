@@ -1,6 +1,6 @@
 <?php
 
-class ControllerIndex extends StartController
+class ControllerIndex extends BaseSiteController
 {
     /* Разрешить распаковывать переданные данные в вид */
     //protected $extracted = true;

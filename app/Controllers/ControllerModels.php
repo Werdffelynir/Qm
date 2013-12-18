@@ -1,6 +1,6 @@
 <?php
 
-class ControllerModels extends StartController
+class ControllerModels extends BaseSiteController
 {
     public function after()
     {

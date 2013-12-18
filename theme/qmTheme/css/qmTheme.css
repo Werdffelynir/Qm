@@ -387,9 +387,6 @@ color: #E0E0FF;
 }
 
 
-
-
-
 /** Кнопки и другие мелкие детали */
 a.btn-delete{
     color: #c12e2a;
@@ -399,3 +396,11 @@ a.btn-edit{
      color: #122436;
      font-weight: bold;
  }
+
+#textAreaContent:focus, .nicEdit-main:focus{
+    outline: hidden;
+}
+
+.former input[type='submit']{
+    padding: 4px 10px;
+}

@@ -89,7 +89,8 @@ return array(
     /** Первичный Контролер для наследования созданых контролеров, запускаеться по умолчанию.
      * Назначение: инициализация общих параметров, видов, других настроек */
     "runStartController" => array(
-        "StartController",
+        "BaseSiteController",
+        "BaseAdminController",
     ),
 
 

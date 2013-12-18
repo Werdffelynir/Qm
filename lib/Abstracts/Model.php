@@ -68,9 +68,13 @@ abstract class Model {
     public function getByAttr($tbl, $attr, $attrVal)
     {
         $sql = "SELECT * FROM ".$tbl." WHERE ".$attr."='".$attrVal."'";
+        return $this->db->query($sql)->row();
+    }
+    public function getAllByAttr($tbl, $attr, $attrVal)
+    {
+        $sql = "SELECT * FROM ".$tbl." WHERE ".$attr."='".$attrVal."'";
         return $this->db->query($sql)->all();
     }
-
 
     public function insert($tbl, array $data)
     {
