@@ -1,10 +1,10 @@
 <?php
 
-/*********************************************************************************************
+/**
+ * Файл генерации Gen.php
  *
- *                                    Генерация Контролера
- *
- ********************************************************************************************/
+ * todo: Переписать по стилю ООП в следущей стабильной версии
+ */
 
 
 /*********************************************************************************************
@@ -22,7 +22,13 @@
  *      [Views]
  *          main.php
  *      [Structure]
- *
+ *          [administrator]
+ *              [Controllers]
+ *                  ControllerAdministrator.php
+ *              [Models]
+ *                  Base.php
+ *              [Views]
+ *                  main.php
  * [theme]
  *      [new_theme_name]
  *          main.php
@@ -67,26 +73,6 @@ if(!isset($_POST['newAppName']))
     </ul>';
 }else{
 
-/*
-[new_app_name]
-     [Controllers]
-         ControllerIndex.php
-     [Classes]
-         Func.php
-     [Models]
-         Base.php
-     [Views]
-         main.php
-     [Structure]
-
-[theme]
-     [new_theme_name]
-         main.php
-         [css]
-         [js]
-*/
-// Желаемая структура папок
-
 /** Создание каталогов */
     $newAppName = $_POST['newAppName'];
     if(is_dir(PATH.$newAppName)){
@@ -102,25 +88,22 @@ if(!isset($_POST['newAppName']))
         $createControllers             = $newApp.'Controllers/';
         $createModels                  = $newApp.'Models/';
         $createViews                   = $newApp.'Views/index/';
-        $createStructureControllers    = $newApp.'Structure/Controllers/';
-        $createStructureModels         = $newApp.'Structure/Models/';
-        $createStructureViews          = $newApp.'Structure/Views/';
+        $createStructureControllers    = $newApp.'Structure/administrator/Controllers/';
+        $createStructureModels         = $newApp.'Structure/administrator/Models/';
+        $createStructureViews          = $newApp.'Structure/administrator/Views/';
 
-        $fileFunction = 'functions.php';
-        $fileBoot     = 'bootstrap.php';
-        $fileConfig   = 'configuration.php';
-        $fileClasses      = 'QmClasses.php';
-        $fileControllers  = 'ControllersIndex.php';
-        $fileModels       = 'Base.php';
-        $fileView         = 'main.php';
-
-        $fileContentFunction  = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_functions.tpl');
-        $fileContentBootstrap = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_bootstrap.tpl');
-        $fileContentConfig = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_configuration.tpl');
-        $fileContentClasses = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_classes.tpl');
+        /** Содержание для корневых файлов */
+        $fileContentFunction    = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_functions.tpl');
+        $fileContentBootstrap   = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_bootstrap.tpl');
+        $fileContentConfig      = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_configuration.tpl');
+        /** Содержание для внутрених файлов в базовых каталогах Controllers, Models, Views и Classes  */
+        $fileContentClasses     = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_classes.tpl');
         $fileContentControllers = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_controller.tpl');
-        $fileContentModels = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_model.tpl');
-        $fileContentView = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_view_main.tpl');
+        $fileContentModels      = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_model.tpl');
+        $fileContentView        = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_view_main.tpl');
+        /** Содержание для Структуры */
+        $fileStructureControllersAdmin = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_controller_structure_admin.tpl');
+
 
         if (!mkdir($createClasses, 0, true))
             $structureResult = false;
@@ -138,13 +121,20 @@ if(!isset($_POST['newAppName']))
             $structureResult = false;
 
         if($structureResult){
-            file_put_contents($newApp.$fileFunction, $fileContentFunction);
-            file_put_contents($newApp.$fileBoot, $fileContentBootstrap);
-            file_put_contents($newApp.$fileConfig, $fileContentConfig);
-            file_put_contents($createClasses.$fileClasses, $fileContentClasses);
-            file_put_contents($createControllers.$fileControllers, $fileContentControllers);
-            file_put_contents($createModels.$fileModels, $fileContentModels);
-            file_put_contents($newApp.'Views/'.$fileView, $fileContentView);
+            /** Создание файлов корневых преложения */
+            file_put_contents($newApp.'functions.php', $fileContentFunction);
+            file_put_contents($newApp.'bootstrap.php', $fileContentBootstrap);
+            file_put_contents($newApp.'configuration.php', $fileContentConfig);
+            /** Создание файлов внутрених в базовых каталогах Controllers, Models, Views и Classes */
+            file_put_contents($newApp.'Controllers/ControllersIndex.php', $fileContentControllers);
+            file_put_contents($newApp.'Models/Base.php', $fileContentModels);
+            file_put_contents($newApp.'Views/main.php', $fileContentView);
+            file_put_contents($newApp.'Classes/QmClasses.php', $fileContentClasses);
+            /** Создание файлов внутри структуры-модуля */
+            file_put_contents($newApp.'Structure/functions.php', $fileContentFunction);
+            file_put_contents($newApp.'Structure/administrator/Controllers/ControllerAdministrator.php', $fileStructureControllersAdmin);
+            file_put_contents($newApp.'Structure/administrator/Models/Base.php', $fileContentModels);
+            file_put_contents($newApp.'Structure/administrator/Views/main.php', $fileContentView);
         }
 
         $newAppTitle = "Генератор кода: Новое преложение создано!";

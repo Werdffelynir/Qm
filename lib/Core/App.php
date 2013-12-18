@@ -8,9 +8,9 @@
 
 class App {
 
-    /** @var string */
+    /** @var string хранит путь к корню преложения */
     public $path;
-    /** @var string */
+    /** @var string хранит доменный хост преложения */
     public $host;
 
     /** @var string */
