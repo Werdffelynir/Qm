@@ -58,22 +58,11 @@ class SimplePDO {
     }
 
 
-
-    public function update($sql, array $data=null) {
-        if(is_null($data)){
-            var_dump($this->sth);
-            $this->sth = $this->dbh->prepare($sql);
-            $result = $this->sth->execute();
-        }else{
-            $this->sth = $this->dbh->prepare($sql);
-            $result = $this->sth->execute($data);
-        }
-        return $result;
-    }
-
-
     /**
      * Базовый метод запросов к базе данных.
+     * Использует стандартный метод execute() через обертку, принимает sql запрос,
+     * или если указан второй параметр происходит выполнение через метод prepare()
+     * возвращает екземпляр обекта
      *
      * Запросы осуществляються:
      * <pre>
@@ -92,10 +81,13 @@ class SimplePDO {
      *          $date
      *          )
      *      )
+     * ->query( "SELECT title, article, date FROM blog WHERE id=:id",
+     *      array('id'=> '215')
+     *      )
      * <pre>
-     * @param $sql
-     * @param array $data
-     * @return $this
+     * @param string $sql   Принимает открытый SQL запрос или безопасный
+     * @param array $data   Значения для безопасного запроса
+     * @return $this        Возвращает екземпляр обекта
      */
     public function query($sql, array $data=null)
     {
@@ -109,10 +101,62 @@ class SimplePDO {
         return $this;
     }
 
+
+    /**
+     * Метод для запроса обновления записи в БД. Еквивалентен методу query()
+     * но возвращает количество затронутых при обновлении записей.
+     *
+     * Запросы осуществляються:
+     * <pre>
+     * ->update("UPDATE table
+     *          SET title=:title, article=:article, date=:date
+     *          WHERE id=:id ",
+     *      array(
+     *          'title'     => $title,
+     *          'article'   => $article,
+     *          'date'      => time(),
+     *          'id'        => $id
+     *          )
+     *      )
+     *
+     * ->update("UPDATE table
+     *          SET title=?, article=?, date=?
+     *          WHERE id=? ",
+     *      array(
+     *          $title,
+     *          $article,
+     *          $date,
+     *          $id
+     *          )
+     *      )
+     *
+     * ->update( "UPDATE table
+     *          SET title='".$title."', article='".$article."', date='".$date."'
+     *          WHERE id='".$id."' ")
+     * <pre>
+     *
+     * @param $sql
+     * @param array $data
+     * @return bool
+     */
+    public function update($sql, array $data=null) {
+        if(is_null($data)){
+            var_dump($this->sth);
+            $this->sth = $this->dbh->prepare($sql);
+            $result = $this->sth->execute();
+        }else{
+            $this->sth = $this->dbh->prepare($sql);
+            $result = $this->sth->execute($data);
+        }
+        return $result;
+    }
+
+
+
     /**
      * Извлечь строку с запроса
      *
-     * Сожет быть: assoc, class, obj
+     * Выберает типы: assoc, class, obj
      * @param  $type использует FETCH_ASSOC, FETCH_CLASS, и FETCH_OBJ.
      * @return mixed
      */
@@ -125,7 +169,7 @@ class SimplePDO {
     }
 
     /**
-     * Извлечь несколько сток
+     * Извлечь несколько строк
      *
      * @param  $type
      * @return array

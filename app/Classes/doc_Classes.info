@@ -31,3 +31,18 @@ $obj = $this->loadClass("MyNewClass");
 не ограничуеться контролером:
 $obj = App::createObj('CustomFolder/myClass/SuperClass');
 В переменной $obj содержиться екземпляр обекта SuperClass, файла по пути (app/CustomFolder/myClass/SuperClass.php)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

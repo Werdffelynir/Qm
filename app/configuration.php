@@ -59,7 +59,7 @@ return array(
 
     /** Настройки подключения к базе данных.
         "db" => array(
-            "driver"    => "mysqli",
+            "driver"    => "mysql",
             "class"     => "SimplePDO",
             "host"      => "localhost",
             "dbName"    => "minblog",
