@@ -70,7 +70,7 @@ tr td { background-color: #f3f3f3; }
 tr.alt td { background-color: #dfdfdf; }
 abbr, acronym, cite { cursor: help; border-bottom: 1px dotted #444444; }
 
-code{
+.code{
     display: block;
     font-family: Consolas, "Courier New", Courier, monospace;
     color: #211132;
@@ -80,8 +80,17 @@ code{
     border-top-right-radius: 25px;
     border-bottom-left-radius: 25px;
     box-shadow: 0 0 3px rgba(92, 134, 168, 0.65);
+    line-height: 13px;
 }
-code a{border-bottom: 1px dotted #444444;}
+.code a{border-bottom: 1px dotted #444444;}
+
+.commentos{
+    color: #356635;
+    font-family: Verdana, Arial;
+    font-size: 11px;
+}
+
+
 
 /* Structure */
 #Qm_wrapper{
@@ -407,11 +416,5 @@ a.btn-edit{
 
 
 
-/**/
-.commentos{
-    color: #356635;
-    font-family: Verdana, Arial;
-    font-size: 11px;
-}
 
 
