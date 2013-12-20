@@ -6,7 +6,6 @@
  * todo: Переписать по стилю ООП в следущей стабильной версии
  */
 
-
 /*********************************************************************************************
  *
  *                                    Генерация Преложения
@@ -73,78 +72,79 @@ if(!isset($_POST['newAppName']))
     </ul>';
 }else{
 
-/** Создание каталогов */
-    $newAppName = $_POST['newAppName'];
-    if(is_dir(PATH.$newAppName)){
+    if (preg_match("|^[a-zA-Z0-9]*$|", $_POST['newAppName'])){
+        /** Создание каталогов */
+        $newAppName = $_POST['newAppName'];
+        if(is_dir(PATH.$newAppName)){
 
-        $newAppTitle = "Каталог \"".PATH.$newAppName."\" уже существует!";
-        $newAppContent = '<a href="'.URL.'/gen/app">Пересоздать.</a>';
-    }else{
+            $newAppTitle = "Каталог \"".PATH.$newAppName."\" уже существует!";
+            $newAppContent = '<a href="'.URL.'/gen/app">Пересоздать.</a>';
+        }else{
 
-        $newApp = $newAppName.DS;
+            $newApp = $newAppName.DS;
 
-        $structureResult = true;
-        $createClasses                 = $newApp.'Classes/';
-        $createControllers             = $newApp.'Controllers/';
-        $createModels                  = $newApp.'Models/';
-        $createViews                   = $newApp.'Views/index/';
-        $createStructureControllers    = $newApp.'Structure/administrator/Controllers/';
-        $createStructureModels         = $newApp.'Structure/administrator/Models/';
-        $createStructureViews          = $newApp.'Structure/administrator/Views/';
+            $structureResult = true;
+            $createClasses                 = $newApp.'Classes/';
+            $createControllers             = $newApp.'Controllers/';
+            $createModels                  = $newApp.'Models/';
+            $createViews                   = $newApp.'Views/index/';
+            $createStructureControllers    = $newApp.'Structure/administrator/Controllers/';
+            $createStructureModels         = $newApp.'Structure/administrator/Models/';
+            $createStructureViews          = $newApp.'Structure/administrator/Views/';
 
-        /** Содержание для корневых файлов */
-        $fileContentFunction    = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_functions.tpl');
-        $fileContentBootstrap   = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_bootstrap.tpl');
-        $fileContentConfig      = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_configuration.tpl');
-        /** Содержание для внутрених файлов в базовых каталогах Controllers, Models, Views и Classes  */
-        $fileContentClasses     = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_classes.tpl');
-        $fileContentControllers = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_controller.tpl');
-        $fileContentModels      = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_model.tpl');
-        $fileContentView        = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_view_main.tpl');
-        /** Содержание для Структуры */
-        $fileStructureControllersAdmin = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_controller_structure_admin.tpl');
+            /** Содержание для корневых файлов */
+            $fileContentFunction    = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_functions.tpl');
+            $fileContentBootstrap   = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_bootstrap.tpl');
+            $fileContentConfig      = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_configuration.tpl');
+            /** Содержание для внутрених файлов в базовых каталогах Controllers, Models, Views и Classes  */
+            $fileContentClasses     = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_classes.tpl');
+            $fileContentControllers = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_controller.tpl');
+            $fileContentModels      = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_model.tpl');
+            $fileContentView        = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_view_main.tpl');
+            /** Содержание для Структуры */
+            $fileStructureControllersAdmin = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_controller_structure_admin.tpl');
 
 
-        if (!mkdir($createClasses, 0, true))
-            $structureResult = false;
-        if (!mkdir($createControllers, 0, true))
-            $structureResult = false;
-        if (!mkdir($createModels, 0, true))
-            $structureResult = false;
-        if (!mkdir($createViews, 0, true))
-            $structureResult = false;
-        if (!mkdir($createStructureControllers, 0, true))
-            $structureResult = false;
-        if (!mkdir($createStructureModels, 0, true))
-            $structureResult = false;
-        if (!mkdir($createStructureViews, 0, true))
-            $structureResult = false;
+            if (!mkdir($createClasses, 0, true))
+                $structureResult = false;
+            if (!mkdir($createControllers, 0, true))
+                $structureResult = false;
+            if (!mkdir($createModels, 0, true))
+                $structureResult = false;
+            if (!mkdir($createViews, 0, true))
+                $structureResult = false;
+            if (!mkdir($createStructureControllers, 0, true))
+                $structureResult = false;
+            if (!mkdir($createStructureModels, 0, true))
+                $structureResult = false;
+            if (!mkdir($createStructureViews, 0, true))
+                $structureResult = false;
 
-        if($structureResult){
-            /** Создание файлов корневых преложения */
-            file_put_contents($newApp.'functions.php', $fileContentFunction);
-            file_put_contents($newApp.'bootstrap.php', $fileContentBootstrap);
-            file_put_contents($newApp.'configuration.php', $fileContentConfig);
-            /** Создание файлов внутрених в базовых каталогах Controllers, Models, Views и Classes */
-            file_put_contents($newApp.'Controllers/ControllersIndex.php', $fileContentControllers);
-            file_put_contents($newApp.'Models/Base.php', $fileContentModels);
-            file_put_contents($newApp.'Views/main.php', $fileContentView);
-            file_put_contents($newApp.'Classes/QmClasses.php', $fileContentClasses);
-            /** Создание файлов внутри структуры-модуля */
-            file_put_contents($newApp.'Structure/functions.php', $fileContentFunction);
-            file_put_contents($newApp.'Structure/administrator/Controllers/ControllerAdministrator.php', $fileStructureControllersAdmin);
-            file_put_contents($newApp.'Structure/administrator/Models/Base.php', $fileContentModels);
-            file_put_contents($newApp.'Structure/administrator/Views/main.php', $fileContentView);
-        }
+            if($structureResult){
+                /** Создание файлов корневых преложения */
+                file_put_contents($newApp.'functions.php', $fileContentFunction);
+                file_put_contents($newApp.'bootstrap.php', $fileContentBootstrap);
+                file_put_contents($newApp.'configuration.php', $fileContentConfig);
+                /** Создание файлов внутрених в базовых каталогах Controllers, Models, Views и Classes */
+                file_put_contents($newApp.'Controllers/ControllersIndex.php', $fileContentControllers);
+                file_put_contents($newApp.'Models/Base.php', $fileContentModels);
+                file_put_contents($newApp.'Views/main.php', $fileContentView);
+                file_put_contents($newApp.'Classes/QmClasses.php', $fileContentClasses);
+                /** Создание файлов внутри структуры-модуля */
+                file_put_contents($newApp.'Structure/functions.php', $fileContentFunction);
+                file_put_contents($newApp.'Structure/administrator/Controllers/ControllerAdministrator.php', $fileStructureControllersAdmin);
+                file_put_contents($newApp.'Structure/administrator/Models/Base.php', $fileContentModels);
+                file_put_contents($newApp.'Structure/administrator/Views/main.php', $fileContentView);
+            }
 
-        $newAppTitle = "Генератор кода: Новое преложение создано!";
-        $newAppContent = '
-    <p>Файлы нового преложения созданы в корне фреймворка. Преложение активно после создания не будет, чтобы активировать
-    измениете параметр "pathApp" на имя созданого каталога <b>'.$_POST["newAppName"].'</b> в конфиг-файле ядара системе (__ROOT__/lib/configuration.php). </p>
-    ';
-        $newAppContentExists = '
-        <h2>Генератор кода: Дальнейшие действия</h2>
-        <p>Структура преложения преложения</p>
+            $newAppTitle = "Генератор кода: Новое преложение создано!";
+            $newAppContent = '
+        <p>Файлы нового преложения созданы в корне фреймворка. Преложение активно после создания не будет, чтобы активировать
+        измениете параметр "pathApp" на имя созданого каталога <b>'.$_POST["newAppName"].'</b> в конфиг-файле ядара системе (__ROOT__/lib/configuration.php). </p>
+        ';
+            $newAppContentExists = '
+            <h2>Генератор кода: Дальнейшие действия</h2>
+            <p>Структура преложения преложения</p>
 <pre>
 [new_app_name]
      [Controllers]
@@ -162,11 +162,14 @@ if(!isset($_POST['newAppName']))
          main.php
          [css]
          [js]
-</pre>
-    ';
+</pre>';
+        }
+
+    }else{
+        $newAppTitle = "<p>ОШИБКА!</p>";
+        $newAppContent = "<p>Введены запрещенные символы!</p>";
+        $newAppContentExists = "<p>Еще раз <a href='".URL."/gen/app'>создать преложение</a>. </p>";
     }
-
-
 
 }
 
@@ -183,54 +186,55 @@ $data['newAppContentExists']    = $newAppContentExists;
 
 if(isset($_POST['newStructureName']))
 {
-    $newStructureName = $_POST['newStructureName'];
-    $structurePath = PATH_APP."Structure".DS.$newStructureName.DS;
+    if (preg_match("|^[a-zA-Z0-9]*$|", $_POST['newStructureName'])){
+        $newStructureName = $_POST['newStructureName'];
+        $structurePath = PATH_APP."Structure".DS.$newStructureName.DS;
 
-    if(is_dir($structurePath))
-    {
-        $newStructureTitle = "Каталог \"".$structurePath."\" уже существует!";
-        $newStructureContent = '<a href="'.URL.'/gen/structure">Пересоздать.</a>';
-    }
-    else
-    {
-        $structureResult = 0;
-        $createStructureControllers    = $structurePath.'Controllers/';
-        $createStructureModels         = $structurePath.'Models/';
-        $createStructureViews          = $structurePath.'Views/';
-
-        /** Содержание для файлов */
-        $fileStructureContentFunction    = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_functions.tpl');
-        $fileStructureContentControllers = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_controller.tpl');
-        $fileStructureContentModels      = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_model.tpl');
-        $fileStructureContentView        = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_view_main.tpl');
-
-        /** Создание директорий */
-        if (!mkdir($createStructureControllers, 0, true))
-            $structureResult ++;
-        if (!mkdir($createStructureModels, 0, true))
-            $structureResult ++;
-        if (!mkdir($createStructureViews, 0, true))
-            $structureResult ++;
-
-        if($structureResult == 0){
-
-            /** Создание файлов внутри структуры-модуля*/
-            file_put_contents($structurePath.'functions.php', $fileStructureContentFunction);
-            file_put_contents($structurePath.'Controllers/ControllerIndex.php', $fileStructureContentControllers);
-            file_put_contents($structurePath.'Models/Base.php', $fileStructureContentModels);
-            file_put_contents($structurePath.'Views/main.php', $fileStructureContentView);
+        if(is_dir($structurePath))
+        {
+            $newStructureTitle = "Каталог \"".$structurePath."\" уже существует!";
+            $newStructureContent = '<a href="'.URL.'/gen/structure">Пересоздать.</a>';
         }
-    }
+        else
+        {
+            $structureResult = 0;
+            $createStructureControllers    = $structurePath.'Controllers/';
+            $createStructureModels         = $structurePath.'Models/';
+            $createStructureViews          = $structurePath.'Views/';
+
+            /** Содержание для файлов */
+            $fileStructureContentFunction    = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_functions.tpl');
+            $fileStructureContentControllers = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_controller.tpl');
+            $fileStructureContentModels      = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_model.tpl');
+            $fileStructureContentView        = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_view_main.tpl');
+
+            /** Создание директорий */
+            if (!mkdir($createStructureControllers, 0, true))
+                $structureResult ++;
+            if (!mkdir($createStructureModels, 0, true))
+                $structureResult ++;
+            if (!mkdir($createStructureViews, 0, true))
+                $structureResult ++;
+
+            if($structureResult == 0){
+
+                /** Создание файлов внутри структуры-модуля*/
+                file_put_contents($structurePath.'functions.php', $fileStructureContentFunction);
+                file_put_contents($structurePath.'Controllers/ControllerIndex.php', $fileStructureContentControllers);
+                file_put_contents($structurePath.'Models/Base.php', $fileStructureContentModels);
+                file_put_contents($structurePath.'Views/main.php', $fileStructureContentView);
+            }
+        }
 
 
-    $newAppTitle = "Генератор кода: Новая структура создана!";
-    $newAppContent = '
-    <p>Файлы новой структуры созданы в активном преложениии. Структура после создания доступна не будет, чтобы активировать правте конфиг-файл активного преложения,
-    нужно добавить в параметр "structure" имя созданого каталога <b>'.$newStructureName.'</b>. </p>
-    ';
-    $newAppContentExists = '
-        <h2>Генератор кода: Дальнейшие действия</h2>
-        <p>Дерево сгененрированой структуры.</p>
+        $newAppTitle = "Генератор кода: Новая структура создана!";
+        $newAppContent = '
+        <p>Файлы новой структуры созданы в активном преложениии. Структура после создания доступна не будет, чтобы активировать правте конфиг-файл активного преложения,
+        нужно добавить в параметр "structure" имя созданого каталога <b>'.$newStructureName.'</b>. </p>
+        ';
+        $newAppContentExists = '
+            <h2>Генератор кода: Дальнейшие действия</h2>
+            <p>Дерево сгененрированой структуры.</p>
 <pre>
 [Structure]
     ['.$newStructureName.']
@@ -243,9 +247,16 @@ if(isset($_POST['newStructureName']))
         functions.php
 
 </pre>';
+    }else{
+        $newStructureTitle = "<p>ОШИБКА!</p>";
+        $newStructureContent = "<p>Введены запрещенные символы!</p>";
+        $newStructureContentExists = "<p>Еще раз <a href='".URL."/gen/structure'>создать преложение</a>. </p>";
+    }
 
+}
+else
+{
 
-}else{
     $newStructureTitle = "Генератор кода: Создание структуры-модуля в преложении";
     $newStructureContent = '<p>Файлы новой структуры будут созданы в корне активного преложения.</p>
     <div class="form-gener">
@@ -262,12 +273,8 @@ if(isset($_POST['newStructureName']))
     </div>
 
     <p>После создания структуры его необходимо прописать в конфиг-файле активного переложения (__ROOT__/__APP__/configuration.php)
-    параметру "structure" добавить имя созданого каталога в структуре. </p>
-
-    ';
+    параметру "structure" добавить имя созданого каталога в структуре. </p>';
 }
-
-
 
 
 $data['newStructureTitle']          = $newStructureTitle;
