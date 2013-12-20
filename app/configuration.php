@@ -93,6 +93,12 @@ return array(
         "BaseAdminController",
     ),
 
+    /** Включенные структурных частей приложения, подробно см. в док. */
+    "structure"   => array(
+        //"administrator",
+        //"login",
+        //"example_module",
+    ),
 
 
 );

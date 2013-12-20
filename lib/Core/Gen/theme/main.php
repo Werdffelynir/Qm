@@ -47,6 +47,17 @@
 
 
 
+            <?php if(App::$request == "gen/structure"): ?>
+
+                <h2><?php echo $data['newStructureTitle']; ?></h2>
+                <?php echo $data['newStructureContent']; ?>
+
+                <?php echo $data['newStructureContentExists']; ?>
+
+            <?php endif; ?>
+
+
+
 
             <?php if(App::$request == "gen/controller"): ?>
 
@@ -82,6 +93,7 @@
             <h2 class="sidebartitle">Что генерировать ?</h2>
             <ul>
                 <li><a href="/gen/app">Application</a></li>
+                <li><a href="/gen/structure">Structure</a></li>
                 <li><a href="/gen/controller">Controller</a></li>
                 <li><a href="/gen/model">Model</a></li>
                 <!--                <li><a href="/gen/structure">Structure</a></li>-->

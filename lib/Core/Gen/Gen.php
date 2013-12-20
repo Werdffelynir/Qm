@@ -170,12 +170,109 @@ if(!isset($_POST['newAppName']))
 
 }
 
-$data['newAppContentTitle'] = $newAppTitle;
-$data['newAppContent'] = $newAppContent;
-$data['newAppContentExists'] = $newAppContentExists;
+$data['newAppContentTitle']     = $newAppTitle;
+$data['newAppContent']          = $newAppContent;
+$data['newAppContentExists']    = $newAppContentExists;
+
+
+/*********************************************************************************************
+ *
+ *                                    Генерация Структуры-Модуля
+ *
+ ********************************************************************************************/
+
+if(isset($_POST['newStructureName']))
+{
+    $newStructureName = $_POST['newStructureName'];
+    $structurePath = PATH_APP."Structure".DS.$newStructureName.DS;
+
+    if(is_dir($structurePath))
+    {
+        $newStructureTitle = "Каталог \"".$structurePath."\" уже существует!";
+        $newStructureContent = '<a href="'.URL.'/gen/structure">Пересоздать.</a>';
+    }
+    else
+    {
+        $structureResult = 0;
+        $createStructureControllers    = $structurePath.'Controllers/';
+        $createStructureModels         = $structurePath.'Models/';
+        $createStructureViews          = $structurePath.'Views/';
+
+        /** Содержание для файлов */
+        $fileStructureContentFunction    = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_functions.tpl');
+        $fileStructureContentControllers = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_controller.tpl');
+        $fileStructureContentModels      = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_model.tpl');
+        $fileStructureContentView        = file_get_contents(PATH_LIB_CORE.'Gen'.DS.'templates'.DS.'g_n_view_main.tpl');
+
+        /** Создание директорий */
+        if (!mkdir($createStructureControllers, 0, true))
+            $structureResult ++;
+        if (!mkdir($createStructureModels, 0, true))
+            $structureResult ++;
+        if (!mkdir($createStructureViews, 0, true))
+            $structureResult ++;
+
+        if($structureResult == 0){
+
+            /** Создание файлов внутри структуры-модуля*/
+            file_put_contents($structurePath.'functions.php', $fileStructureContentFunction);
+            file_put_contents($structurePath.'Controllers/ControllerIndex.php', $fileStructureContentControllers);
+            file_put_contents($structurePath.'Models/Base.php', $fileStructureContentModels);
+            file_put_contents($structurePath.'Views/main.php', $fileStructureContentView);
+        }
+    }
+
+
+    $newAppTitle = "Генератор кода: Новая структура создана!";
+    $newAppContent = '
+    <p>Файлы новой структуры созданы в активном преложениии. Структура после создания доступна не будет, чтобы активировать правте конфиг-файл активного преложения,
+    нужно добавить в параметр "structure" имя созданого каталога <b>'.$newStructureName.'</b>. </p>
+    ';
+    $newAppContentExists = '
+        <h2>Генератор кода: Дальнейшие действия</h2>
+        <p>Дерево сгененрированой структуры.</p>
+<pre>
+[Structure]
+    ['.$newStructureName.']
+        [Controllers]
+            ControllerIndex.php
+        [Models]
+            Base.php
+        [Views]
+            main.php
+        functions.php
+
+</pre>';
+
+
+}else{
+    $newStructureTitle = "Генератор кода: Создание структуры-модуля в преложении";
+    $newStructureContent = '<p>Файлы новой структуры будут созданы в корне активного преложения.</p>
+    <div class="form-gener">
+        <form method="post">
+            <p><lable>Название новой структуры-модуля:</lable></p>
+            <p><input name="newStructureName" type="text" value="" placeholder="" /></p>
+            <p><lable>Генерация по шаблону:</lable></p>
+            <p><select name="newStructureType" id="">
+                <option value="none">Стандартный</option>
+                <option value="full">Расширеный</option>
+            </select></p>
+            <p><input type="submit" value="Создать"/></p>
+        </form>
+    </div>
+
+    <p>После создания структуры его необходимо прописать в конфиг-файле активного переложения (__ROOT__/__APP__/configuration.php)
+    параметру "structure" добавить имя созданого каталога в структуре. </p>
+
+    ';
+}
 
 
 
+
+$data['newStructureTitle']          = $newStructureTitle;
+$data['newStructureContent']        = $newStructureContent;
+$data['newStructureContentExists']  = $newStructureContentExists;
 
 /*********************************************************************************************
  *
