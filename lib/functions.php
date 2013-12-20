@@ -159,6 +159,15 @@ function error($titleError, $text = null)
         exit;
     }
 }
+/** Вызывать сообщение о ошибке */
+function QmError($titleError, $text = null)
+{
+    if(QmConf('appMode') == "debug")
+    {
+        print(errorStyle('Вызвана ошибка '.$titleError, $text));
+        exit;
+    }
+}
 /** Общий стиль для вывода ошибок */
 function errorStyle($titleError = null, $text)
 {

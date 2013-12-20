@@ -13,7 +13,7 @@ class ControllerDocs extends BaseSiteController
 
     public function actionIndex()
     {
-        $this->data["pageTitle"] = "Documentation";
+        $this->data["pageTitle"] = "Qm - Документация";
 
         $ModelPages = $this->model("Pages");
         $getCurrent = $ModelPages->getPageByLink('docs');

@@ -15,7 +15,7 @@ class ControllerIndex extends BaseSiteController
         $this->data['title'] = 'Быстрый, простой MVC PHP Framework.';
         $this->data['content'] = $this->partial('pIndex/partialContent');
 
-        $jsA = App::createObj('classes/class/jopa/QmJS');
+        //$jsA = App::createObj('classes/class/jopa/QmJS');
 
         //var_dump($jsA);
 

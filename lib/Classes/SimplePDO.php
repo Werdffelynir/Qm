@@ -53,6 +53,7 @@ class SimplePDO {
      * @return mixed Колчество затронутых строк
      */
     public function exec($sql) {
+        if($this->dbh == null) die("Connection with DataBase closed!");
         $count = $this->dbh->exec($sql);
         return $count;
     }
@@ -91,6 +92,11 @@ class SimplePDO {
      */
     public function query($sql, array $data=null)
     {
+        if($this->dbh == null){
+            //QmError("Connection with DataBase closed!", "Соединение с Базой данны не закрыто или не существует");
+            die("Connection with DataBase closed!");
+        }
+
         if(is_null($data)){
             $this->sth = $this->dbh->prepare($sql);
             $this->sth->execute();
@@ -139,7 +145,10 @@ class SimplePDO {
      * @param array $data
      * @return bool
      */
-    public function update($sql, array $data=null) {
+    public function update($sql, array $data=null)
+    {
+        if($this->dbh == null) die("Connection with DataBase closed!");
+
         if(is_null($data)){
             var_dump($this->sth);
             $this->sth = $this->dbh->prepare($sql);
@@ -194,6 +203,7 @@ class SimplePDO {
      */
     public function close() {
         $this->dbh = null;
+        unset($this->dbh);
     }
 
 }

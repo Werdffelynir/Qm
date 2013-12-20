@@ -59,6 +59,7 @@ class Pages extends Model
     }
     public function getPageByLink($getPage)
     {
+        //$this->db->close();
         $page = $this->getByAttr("pages", 'link', $getPage );
 
         return array(

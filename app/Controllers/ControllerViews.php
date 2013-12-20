@@ -9,10 +9,13 @@ class ControllerViews extends BaseSiteController
 
     public function actionIndex()
     {
+        $this->data["pageTitle"] = "Qm - Представления";
 
+        $ModelPages = $this->model("Pages");
+        $getCurrent = $ModelPages->getPageByLink('views');
 
-        $this->data['title'] = 'ControllerViews actionIndex';
-        $this->data['content'] = 'Views.';
+        $this->data['title'] = $getCurrent['title'];
+        $this->data['content'] = htmlspecialchars_decode($getCurrent['content']);
 
         $this->show('main');
     }

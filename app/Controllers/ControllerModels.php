@@ -9,10 +9,13 @@ class ControllerModels extends BaseSiteController
 
     public function actionIndex()
     {
+        $this->data["pageTitle"] = "Qm - Модели";
 
+        $ModelPages = $this->model("Pages");
+        $getCurrent = $ModelPages->getPageByLink('models');
 
-        $this->data['title'] = 'ControllerModels actionIndex';
-        $this->data['content'] = 'Краткая документация по используванию фреймворка.';
+        $this->data['title'] = $getCurrent['title'];
+        $this->data['content'] = htmlspecialchars_decode($getCurrent['content']);
 
         $this->show('main');
     }

@@ -9,9 +9,13 @@ class ControllerControllers extends BaseSiteController
 
     public function actionIndex()
     {
+        $this->data["pageTitle"] = "Qm - Контролеры.";
 
-        //$this->data['title'] = 'Controller Controllers actionIndex';
-        $this->data['content'] = 'Краткая документация по используванию фреймворка.';
+        $ModelPages = $this->model("Pages");
+        $getCurrent = $ModelPages->getPageByLink('controllers');
+
+        $this->data['title'] = $getCurrent['title'];
+        $this->data['content'] = htmlspecialchars_decode($getCurrent['content']);
 
         $this->show('main');
     }

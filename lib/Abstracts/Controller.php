@@ -6,7 +6,7 @@ abstract class Controller extends Base {
     /**
      * Временно хранит имена видов
      */
-    public $view;
+    public $view = 'main';
 
 
     /**
@@ -107,13 +107,16 @@ abstract class Controller extends Base {
      * out('name_view', true, true);
      */
 
-    public function show($viewName, $nested=false, $theme=false)
+    public function show($viewName=false, $nested=false, $theme=false)
     {
         /** Если указано распаковка с масива в контролере, вложеные двнные
          *  будут доступны в виде в роспакованой форме
          */
         if($this->extracted == true AND !empty($this->data))
             extract($this->data);
+
+        if($viewName==false)
+            $viewName = $this->view;
 
         if(!$theme){
             if(!$nested){
