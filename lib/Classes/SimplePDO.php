@@ -109,60 +109,6 @@ class SimplePDO {
 
 
     /**
-     * Метод для запроса обновления записи в БД. Еквивалентен методу query()
-     * но возвращает количество затронутых при обновлении записей.
-     *
-     * Запросы осуществляються:
-     * <pre>
-     * ->update("UPDATE table
-     *          SET title=:title, article=:article, date=:date
-     *          WHERE id=:id ",
-     *      array(
-     *          'title'     => $title,
-     *          'article'   => $article,
-     *          'date'      => time(),
-     *          'id'        => $id
-     *          )
-     *      )
-     *
-     * ->update("UPDATE table
-     *          SET title=?, article=?, date=?
-     *          WHERE id=? ",
-     *      array(
-     *          $title,
-     *          $article,
-     *          $date,
-     *          $id
-     *          )
-     *      )
-     *
-     * ->update( "UPDATE table
-     *          SET title='".$title."', article='".$article."', date='".$date."'
-     *          WHERE id='".$id."' ")
-     * <pre>
-     *
-     * @param $sql
-     * @param array $data
-     * @return bool
-     */
-    public function update($sql, array $data=null)
-    {
-        if($this->dbh == null) die("Connection with DataBase closed!");
-
-        if(is_null($data)){
-            var_dump($this->sth);
-            $this->sth = $this->dbh->prepare($sql);
-            $result = $this->sth->execute();
-        }else{
-            $this->sth = $this->dbh->prepare($sql);
-            $result = $this->sth->execute($data);
-        }
-        return $result;
-    }
-
-
-
-    /**
      * Извлечь строку с запроса
      *
      * Выберает типы: assoc, class, obj
@@ -206,5 +152,121 @@ class SimplePDO {
         unset($this->dbh);
     }
 
+
+
+    /**
+     * Обертка INSERT
+     * <pre>
+     * ->insert("pages", array("title","link","content","datetime","author"),
+     *      array(
+     *          'title'     =>'SOME TITLE',
+     *          'link'      =>'SOME LINK',
+     *          'content'   =>'SOME CONTENT',
+     *          'datetime'  =>'SOME DATETIME',
+     *          'author'    =>'SOME AUTHOR',
+     *      ));
+     * Сгенерирует:
+     * "INSERT INTO pages (title,link,content,datetime,author)
+     *      VALUES (:title,:link,:content,:datetime,:author)"
+     * и подставит необходимые значения.
+     * </pre>
+     *
+     * @param $table            - Имя таблицы
+     * @param array $dataColumn - Масив названий колонок для обновлеия
+     * @param array $dataValue  - Массив значений для установленных $dataColumn
+     * @return bool
+     */
+    public function insert($table, array $dataColumn, array $dataValue)
+    {
+        if(count($dataColumn) == count($dataValue) )
+        {
+            $constructSql = "INSERT INTO ".$table." (";
+            $constructSql .= implode(", ", $dataColumn);
+            $constructSql .= ") VALUES (";
+            $constructSql .= ':'.implode(", :", $dataColumn);
+            $constructSql .= ")";
+
+            //$resultUpdate = $this->dbh->query($constructSql, $dataValue);
+            $this->sth = $this->dbh->prepare($constructSql);
+            $resultInsert = $this->sth->execute($dataValue);
+            return $resultInsert;
+        }else{
+            return false;
+        }
+    }
+
+
+
+    /**
+     * Метод обертка UPDATE
+     * <pre>
+     * ->update("pages", array("type","link","category","title","content","datetime","author"),
+     *      array(
+     *          'type'     =>'SOME DATA TITLE',
+     *          'link'     =>'SOME DATA LINK',
+     *          'category' =>'SOME DATA CATEGORY',
+     *          'title'    =>'SOME DATA TITLE',
+     *          'content'  =>'SOME DATA CONTENT',
+     *          'datetime' =>'SOME DATA TIME',
+     *          'author'   =>'SOME DATA AUTHOR',
+     *      ),
+     *      "id=13"
+     *  );
+     *
+     * ->update("pages", array("type","link","category","title","content","datetime","author"),
+     *      array(
+     *          'type'     =>'SOME DATA TITLE',
+     *          'link'     =>'SOME DATA LINK',
+     *          'category' =>'SOME DATA CATEGORY',
+     *          'title'    =>'SOME DATA TITLE',
+     *          'content'  =>'SOME DATA CONTENT',
+     *          'datetime' =>'SOME DATA TIME',
+     *          'author'   =>'SOME DATA AUTHOR',
+     *      ),
+     *      array( "id=:updId AND title=:updTitle",
+     *          array('updId'=>13, 'updTitle'=>'SOME TITLE')
+     *      )
+     *  );
+     * Сгенерирует: "UPDATE pages SET title=:title, type=:type, link=:link, category=:category, subcategory=:subcategory, content=:content, datetime=:datetime WHERE id=:updId AND title=:updTitle;"
+     * </pre>
+     *
+     * @param $table            - Имя таблицы
+     * @param array $dataColumn - Масив названий колонок для обновлеия
+     * @param array $dataValue  - Массив значений для установленных $dataColumn
+     * @param $where            - определение, строка НЕ безопасно "id=$id", или безопасный вариант array( "id=:updId", array('updId'=>$id))
+     * @return bool
+     */
+    public function update($table, array $dataColumn, array $dataValue, $where)
+    {
+        if(count($dataColumn) == count($dataValue) )
+        {
+            $constructSql = "UPDATE ".$table." SET ";
+
+            for($i=0; $i<count($dataColumn); $i++){
+                if($i < count($dataColumn)-1 ){
+                    $constructSql .= $dataColumn[$i]."=:".$dataColumn[$i].", ";
+                }else{
+                    $constructSql .= $dataColumn[$i]."=:".$dataColumn[$i]." ";
+                }
+            }
+
+            if(is_string($where))
+            {
+                $constructSql .= " WHERE ".$where;
+            }
+            elseif( is_array($where) AND is_array($where[1]) )
+            {
+                $constructSql .= " WHERE ".$where[0];
+                $dataValue = array_merge($dataValue,$where[1]);
+            }
+
+            $this->sth = $this->dbh->prepare($constructSql);
+            $resultUpdate = $this->sth->execute($dataValue);
+
+            return $resultUpdate;
+        }else{
+            return false;
+        }
+    }
 }
 

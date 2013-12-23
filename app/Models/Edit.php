@@ -64,7 +64,7 @@ class Edit extends Model
                     datetime=:datetime
                 WHERE id=:id;";
 
-        $updateResult = $this->db->update($sql, array(
+        $updateResult = $this->db->query($sql, array(
                 'title'     => $data['title'],
                 'type'      => $data['type'],
                 'link'      => $data['link'],

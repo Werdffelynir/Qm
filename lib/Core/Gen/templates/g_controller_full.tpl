@@ -8,10 +8,12 @@
  * вам необходимо провести реорганизацию кода даного контролера
  */
 
-class Controller[[CONTROLLERNAME]] extends [[CONTROLLEREXTENDS]]{
+class Controller[[CONTROLLERNAME]] extends [[CONTROLLEREXTENDS]]
+{
 
     /** Розпаковывать массивы в виде */
     protected $extracted = false;
+
 
     /** Конструктор задает последовательность загрузки методов */
     public function __construct()
@@ -30,6 +32,7 @@ class Controller[[CONTROLLERNAME]] extends [[CONTROLLEREXTENDS]]{
         #Code...
     }
 
+
     /**
      * Метод отрабатываеться после загрузки системы и всех классов
      * Предназначин для описания перезаписи автозагрузок или рание обявленных значений
@@ -45,11 +48,14 @@ class Controller[[CONTROLLERNAME]] extends [[CONTROLLEREXTENDS]]{
         #Code...
     }
 
+
     /** Внешний метод. Отрабатываеться по умолчанию */
     public function actionIndex()
     {
         #Code...
+        #$this->show();
     }
+
 
     /** Внутрений метод */
     public function myMethod()

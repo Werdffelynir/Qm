@@ -8,9 +8,14 @@
 
 class [[MODELNAME]] extends Model
 {
+
+    /** Выбрать все с таблицы __myTable__ */
     public function all()
     {
-        $sql = "SELECT * FROM pages";
-        return $this->db->query($sql)->all();
+        #$sql = "SELECT * FROM __myTable__";
+        #return $this->db->query($sql)->all();
     }
+
+
+
 }

@@ -178,10 +178,4 @@ abstract class Model {
         return $this->db->query($sql)->all();
     }
 
-
-
-    //public function insert($tbl, array $data){ }
-    //public function update($tbl, array $data){ }
-
-
 }
