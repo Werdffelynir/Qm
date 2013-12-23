@@ -1,7 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Werdffelynir
+ * Ядро системы
+ * Author: OLWerdffelynir
  * Date: 07.12.13
  * Time: 14:36
  */

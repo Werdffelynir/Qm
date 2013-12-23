@@ -14,6 +14,7 @@ class ControllerEdit extends BaseAdminController{
     public $modelEdit;
 
     public $categoryDocumentation = array('-','Home','Documentation','Controllers','Models','Views','Structure','Quick start','Download' );
+    public $subCategoryDocumentation = array('To all','Helpers','Functions' );
 
 
 
@@ -82,6 +83,7 @@ class ControllerEdit extends BaseAdminController{
         $formEdit = $this->partial('pEdit/formEdit',  array(
             'type'       => "create",                       // тип формы
             'catList'    => $this->categoryDocumentation,   // список категорий
+            'subCatList' => $this->subCategoryDocumentation,// список субкатегорий
             'title'      => null,  // бинды
             'link'       => null,  // ...
             'content'    => null,  // ...
@@ -134,8 +136,10 @@ class ControllerEdit extends BaseAdminController{
 
             /** Импорт части вида в общий контент, тут я просто перечесляю необходимые мне катгории.*/
             $formEdit = $this->partial('pEdit/formEdit',  array(
-                'type'       => "update",                       // тип формы
+                'typeID'     => 'update',                       // тип формы
+                'type'       => $contentToEdit['type'],                       // тип формы
                 'catList'    => $this->categoryDocumentation,   // список категорий
+                'subCatList' => $this->subCategoryDocumentation,// субкаткгорйи список
                 'title'      => $contentToEdit['title'],        // данные существующей статьи
                 'link'       => $contentToEdit['link'],         // ...
                 'content'    => $contentToEdit['content'],      // ...
@@ -174,12 +178,13 @@ class ControllerEdit extends BaseAdminController{
 
 
 
-            if($_POST['type'] == "create")
+            if($_POST['typeID'] == "create")
             {
                 $savePage['title']      = $_POST['title'];
+                $savePage['type']       = $_POST['type'];
                 $savePage['link']       = $_POST['link'];
                 $savePage['category']   = $_POST['category'];
-                $savePage['subcategory']= 'none';
+                $savePage['subcategory']= $_POST['subcategory'];
                 $savePage['content']    = htmlspecialchars($_POST['content']);
                 $savePage['datetime']   = time();
                 $savePage['author']     = QmUser::id();
@@ -191,10 +196,11 @@ class ControllerEdit extends BaseAdminController{
                     QmFunc::redirect(URL.'/edit/create');
 
             }
-            elseif($_POST['type'] == "update")
+            elseif($_POST['typeID'] == "update")
             {
                 $result = $this->modelEdit->updatePage(array(
                     'title'         => $_POST['title'],
+                    'type'          => $_POST['type'],
                     'link'          => $_POST['link'],
                     'category'      => $_POST['category'],
                     'subcategory'   => $_POST['subcategory'],

@@ -45,7 +45,6 @@ class Edit extends Model
         );
 
         return $saveResult;
-
     }
 
 
@@ -57,6 +56,7 @@ class Edit extends Model
     {
         $sql = "UPDATE pages
                 SET title=:title,
+                    type=:type,
                     link=:link,
                     category=:category,
                     subcategory=:subcategory,
@@ -66,6 +66,7 @@ class Edit extends Model
 
         $updateResult = $this->db->update($sql, array(
                 'title'     => $data['title'],
+                'type'      => $data['type'],
                 'link'      => $data['link'],
                 'category'  => $data['category'],
                 'subcategory'=>$data['subcategory'],

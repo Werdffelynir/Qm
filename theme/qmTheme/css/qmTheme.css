@@ -276,7 +276,6 @@ color: #E0E0FF;
     border-bottom: none;
 }
 
-
 /* Footer */
 #Qm_footer{
     font-size: 10px;
@@ -286,19 +285,22 @@ color: #E0E0FF;
 #footer a:hover, #footer a:active { color: #bbbbbb; border-bottom-color: #bbbbbb; }
 
 /* Forms */
-.former input[type="text"]{
+.former input[type="text"], .former select{
     padding: 4px 5px;
     color: #050f18;
+    width: 315px;
+}
+
+.former textarea{}
+.former input[name="title"]{
     width: 450px;
 }
-.former input[type="submit"]{}
-.former select{
-    padding: 4px 5px;
-    color: #050f18;
-    width: 200px;
+.former table, .former table tr, .former table tr td{
+    border: none;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
 }
-.former textarea{}
-
 
 
 /*  Content Formated 
@@ -410,11 +412,9 @@ a.btn-edit{
     outline: hidden;
 }
 
-.former input[type='submit']{
-    padding: 4px 10px;
+.textAreaContent{
+    width: 643px;
+    display: block;
 }
-
-
-
 
 
