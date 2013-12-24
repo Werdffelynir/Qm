@@ -4,7 +4,7 @@ class ControllerControllers extends BaseSiteController
 {
     public function after()
     {
-        $this->setСhunk('chunkAboutRightFirst','pControllers/sideBarAbout');
+        $this->setChunk('chunkAboutRightFirst','pControllers/sideBarAbout');
     }
 
     public function actionIndex()
@@ -22,7 +22,7 @@ class ControllerControllers extends BaseSiteController
 
     public function actionTest()
     {
-        //$this->setСhunk('chunkAboutRightFirst','pControllers/chunkAboutRightFirst');
+        //$this->setChunk('chunkAboutRightFirst','pControllers/chunkAboutRightFirst');
 
         $this->data['title'] = 'Controller Controllers actionTest';
         $this->data['content'] = 'Краткая документация по используванию фреймворка.';

@@ -1,4 +1,12 @@
 <?php
+/**
+ * MVC PHP Framework Quick Minimalism
+ * File:    bootstrap.php
+ * Version: 0.2.0
+ * Author:  OL Werdffelynir
+ * Date:    07.12.13
+ */
+
 
 /** Hard-Core system */
 include "Core/App.php";

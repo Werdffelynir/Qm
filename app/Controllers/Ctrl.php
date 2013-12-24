@@ -22,9 +22,9 @@ class Ctrl extends Controller{
                             <p><a href="http://get-simple.info/download/">Не когда не скачуй это</a></p>',
         ));
 
-        $this->setСhunk('Top Chunk','controller/topChunk');
+        $this->setChunk('Top Chunk','controller/topChunk');
 
-        $this->setСhunk('firstChunk','controller/firstChunk', array(
+        $this->setChunk('firstChunk','controller/firstChunk', array(
             'chunkVar1'=>'Первая переменная',
             'chunkVar2'=>'Вторая переменная',
             'chunkVar3'=>'Третя переменная',

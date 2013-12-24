@@ -2,6 +2,11 @@
 //namespace ClLoader;
 
 /**
+ *
+ * Author: OL Werdffelynir
+ * Date: 07.12.13
+ * Time: 14:36
+ *
  * Класс загрузчик классов с директории app/Classes/*
  * Класс реализован по классическому паттерну Singleton
  * Настройки загрузи устанавлеваються с lib/configuration.php

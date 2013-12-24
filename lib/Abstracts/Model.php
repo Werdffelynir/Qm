@@ -1,12 +1,10 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: Comp-2
- * Date: 29.11.13
- * Time: 19:12
- * To change this template use File | Settings | File Templates.
+ * Class Model
+ *
+ * Author: OLWerdffelynir
+ * Date: 07.12.13
  */
-
 abstract class Model {
 
     public $db;

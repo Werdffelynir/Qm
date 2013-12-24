@@ -1,14 +1,14 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: Comp-2
- * Date: 29.11.13
- * Time: 19:16
- * To change this template use File | Settings | File Templates.
+ * Abstract Class Base
+ *
+ * MVC PHP Framework Quick Minimalism
+ * File:    Base.php
+ * Version: 0.2.0
+ * Author:  OL Werdffelynir
+ * Date:    07.12.13
  */
-
 class Base {
-
 
     /**
      * Имя шаблона, устанавлеваеться с конфигурации lib/config.php
@@ -28,12 +28,12 @@ class Base {
      */
     public $var;
 
+
     /**
      * Передаче в вид или шаблон частей кода разметки, такой себе мини виджет
      * Работет совместно с методом setChunk()
      */
     public $chunk;
-
 
 
     /**
@@ -44,16 +44,28 @@ class Base {
         $this->init();
         $this->beforeLoadClasses();
         $this->autoloadClasses();
+        $this->afterLoadClasses();
+
         $this->before();
         if(QmConf('defaultLayout'))
             $this->layout = QmConf('defaultLayout');
         $this->after();
     }
+
     /**
-     * Загружаеться самым первым, может используваться для создания неких настроек
+     * Загружаеться самым первым.
      **/
-    public function beforeLoadClasses(){}
     public function init(){}
+
+
+    /**
+     * Методы отвечают назвнию, запускаються при подключении всех
+     * дополнительных классов, до и после.
+     */
+    public function beforeLoadClasses(){}
+    public function afterLoadClasses(){}
+
+
     /**
      * Загружаеться перед загрузкой подключаемых классов
      **/
@@ -64,12 +76,10 @@ class Base {
     public function after(){}
 
 
-
-
-
     /**
-     * Берет в переменную чатсть вида и возвращает в переменную, работает на подобии
-     * метода out() но не импортирует данные в layout
+     * Берет в переменную чатсть вида и возвращает в переменную,
+     * работает на подобии метода out() но не импортирует данные
+     * в layout.
      * Аналогично можно использывать и сам метод out() или show()
      */
     public function partial( $viewName, array $data=null )
@@ -110,9 +120,9 @@ class Base {
     /**
      *
      */
-    public function setСhunk( $chunkName, $chankView, array $dataChunk=null )
+    public function setChunk( $chunkName, $chunkView, array $dataChunk=null )
     {
-        $viewInclude = PATH_APP_VIEWS.$chankView.'.php';
+        $viewInclude = PATH_APP_VIEWS.$chunkView.'.php';
 
         // Если вид чанка не существует отображается ошибка
         if(!file_exists($viewInclude)){
@@ -135,7 +145,7 @@ class Base {
 
 
     /**
-     *
+     * Производит авто загрузку дополнительных классов
      */
     public function autoloadClasses()
     {
@@ -145,8 +155,10 @@ class Base {
 
 
     /**
-     * @param $fileClassName
-     * @return mixed
+     * Подгружает указаный файл, который должен размещаться в каталоге "Classes"
+     * активного приложения.
+     * @param $fileClassName    Имя класса
+     * @return mixed            Обект класса
      */
     public function loadClass($fileClassName)
     {
@@ -164,13 +176,58 @@ class Base {
      */
     public function model( $modelName )
     {
-        $model = $modelName;
-        include PATH_APP."Models".DS.$model.".php";
-        $newModel = new $model();
-        return (object) $newModel;
+        if(!class_exists($modelName)){
+            $model = $modelName;
+            include PATH_APP."Models".DS.$model.".php";
+            $newModel = new $model();
+            return (object) $newModel;
+        }else{
+            return false;
+        }
     }
 
 
+    /**
+     * @param $modelName
+     * @return bool|mixed
+     */
+    public function incModel( $modelName )
+    {
+        $file = PATH_APP."Models".DS.$modelName.".php";
+        if(!file_exists($file)) die("File ".$file." not exists!");
+        if(!class_exists($modelName)){
+            $this->beforeIncModel();
+            $includeModel = include PATH_APP."Models".DS.$modelName.".php";
+            $this->afterIncModel();
+            return $includeModel;
+        }else{
+            return false;
+        }
+    }
 
+    public function beforeIncModel(){}
+    public function afterIncModel(){}
+
+
+    /**
+     * @param $className
+     * @return bool|mixed
+     */
+    public function incClass( $className )
+    {
+        $file = PATH_APP."Classes".DS.$className.".php";
+        if(!file_exists($file)) die("File ".$file." not exists!");
+        if(!class_exists($className)){
+            $this->beforeIncClass();
+            $includeClass = include $file;
+            $this->afterIncClass();
+            return $includeClass;
+        }else{
+            return false;
+        }
+    }
+
+    public function beforeIncClass(){}
+    public function afterIncClass(){}
 
 }

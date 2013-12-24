@@ -3,7 +3,6 @@
  * Ядро системы
  * Author: OLWerdffelynir
  * Date: 07.12.13
- * Time: 14:36
  */
 
 class App {
@@ -13,13 +12,13 @@ class App {
     /** @var string хранит доменный хост преложения */
     public $host;
 
-    /** @var string */
+    /** @var string путь к приложению */
     public $appPath;
-    /** @var string */
+    /** @var string полный url */
     public $url;
-    /** @var string */
+    /** @var string url (то что после домена) */
     public $urlNude;
-    /** @var string */
+    /** @var string полный url безопасный */
     public $urlHttps;
 
     /** @var string Префикс для контролера. (ControllerAbout.php) */
@@ -29,20 +28,20 @@ class App {
     /** @var string Префикс для URL. (http://my-site.com/index.php?controller/actions) */
     private $requestPrefix; // = "?";
 
-    /** @var string */
+    /** @var array массив запроса */
     public $route;
-    /** @var string */
+    /** @var array массив структур-модклей*/
     public $structures;
 
-    /** @var string */
+    /** @var string строка запроса, данные $route но в виде строки, от корня преложения*/
     public static $request;
-    /** @var string */
+    /** @var string строка запроса, данные $route но в виде строки, полный от доменного имени*/
     public static $requestFull;
 
-    /** @var string */
+    /** @var array свойства конфигурации */
     public $config = array();
 
-    /** @vars string внутриние свойства */
+    /** @vars string системные свойства */
     public $_url;
     public $_requestUri;
 
@@ -81,8 +80,7 @@ class App {
 
 
     /**
-     *
-     *
+     * Запускает весь процес обродотки ядра
      */
     private function run()
     {

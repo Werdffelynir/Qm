@@ -2,14 +2,38 @@
 
 
 /**
- * Class SimplePDO
+ * Class SimplePDO, обертка для запросов.
  *
-Другие полезные методы
-$object->dbh->lastInsertId();
-$object->dbh->quote('SQL запрос не безопасный');
-$object->sth->rowCount();
+ * Author: OL Werdffelynir
+ * Date: 07.12.13
  *
- */
+ * <pre>
+ * Рекомендую использывать втроеные методы PDO для расширеных и сложных
+ * запросов, даные же методы дял простых запросов.
+ *
+ * Методы класса:
+ * Классический не безопасный метод выполнения запросов
+ *     exec($sql)
+ * Базовый метод запросов к базе данных, использует стандартные prepare($sql) и execute($data)
+ *     query($sql, array $data=null)
+ * Извлечь строку с запроса
+ *     row($type="assoc")
+ * Извлечь несколько строк
+ *     all($type="assoc")
+ * Закрыть соединение
+ *     close()
+ * Обертка INSERT
+ *     insert($table, array $dataColumn, array $dataValue)
+ * Обертка UPDATE
+ *     update($table, array $dataColumn, array $dataValue, $where)
+ *
+ *
+ * Другие полезные методы PDO
+ * $object->dbh->lastInsertId();
+ * $object->dbh->quote('SQL запрос не безопасный');
+ * $object->sth->rowCount();
+ * </pre>
+*/
 class SimplePDO {
 
     private $driver;
@@ -47,7 +71,7 @@ class SimplePDO {
 
 
     /**
-     * Класический не безопасный на выполнение
+     * Классический не безопасный метод выполнения запросов
      *
      * @param $sql
      * @return mixed Колчество затронутых строк

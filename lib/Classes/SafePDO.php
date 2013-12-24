@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Class SafePDO, обертка для встроеного расширения PHP PDO предотвращает вывод данных соединения при ошибках
+ *
+ * Author: OL Werdffelynir
+ * Date: 07.12.13
+ * Time: 14:36
+ */
 Class SafePDO extends PDO {
 
     public static function exception_handler($exception) {

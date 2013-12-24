@@ -122,4 +122,11 @@ class ControllerHelper extends BaseSiteController{
 
     }
 
+    public function actionModel()
+    {
+        $this->incModel("Edit");
+        $obj = new Edit;
+        var_dump($obj);
+    }
+
 }

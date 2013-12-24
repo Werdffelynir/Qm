@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Abstract Class Controller
+ *
+ * MVC PHP Framework Quick Minimalism
+ * File:    Controller.php
+ * Version: 0.2.0
+ * Author:  OL Werdffelynir
+ * Date:    07.12.13
+ */
 abstract class Controller extends Base {
 
 
@@ -13,13 +21,7 @@ abstract class Controller extends Base {
      * Временно хранит передаваемые в вид данные
      * используеться совместно с методом showData()
      */
-    protected $data    = array();
-
-
-    /**
-     * Временно хранит имена видов
-     */
-    protected $tpl;
+    protected $data = array();
 
 
     /**
@@ -64,6 +66,7 @@ abstract class Controller extends Base {
     public function __construct()
     {
         parent::__construct();
+
     }
 
 

@@ -33,7 +33,7 @@ class ControllerEdit extends BaseAdminController{
     public function after()
     {
         $this->data["pageTitle"] = "Edit Docs";
-        $this->setСhunk('chunkAboutRightFirst','pEdit/chunkAboutRightFirst');
+        $this->setChunk('chunkAboutRightFirst','pEdit/chunkAboutRightFirst');
 
         $this->modelEdit = $this->model("Edit");
         $menuPage = $this->modelEdit->getMenu();
@@ -42,7 +42,7 @@ class ControllerEdit extends BaseAdminController{
         foreach($menuPage as $title)
             $menu .= "<li><a href=\"".URL."/edit/page/".$title['id']."\">".$title['title']."</a></li>";
         $menu .= "</ul>";
-        $this->setСhunk('chunkAboutRightMenu','pEdit/chunkAboutRightMenu', array("menuPage"=>$menu));
+        $this->setChunk('chunkAboutRightMenu','pEdit/chunkAboutRightMenu', array("menuPage"=>$menu));
     }
 
 

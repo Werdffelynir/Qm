@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * MVC PHP Framework Quick Minimalism
+ * File:    functions.php
+ * Version: 0.2.0
+ * Author:  OL Werdffelynir
+ * Date:    07.12.13
+ */
 
 /** Сепаратор, кратко */
 define("DS", DIRECTORY_SEPARATOR);
