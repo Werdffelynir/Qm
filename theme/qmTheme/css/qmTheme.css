@@ -288,7 +288,8 @@ color: #E0E0FF;
 .former input[type="text"], .former select{
     padding: 4px 5px;
     color: #050f18;
-    width: 315px;
+    width: 324px;
+    margin-bottom: 10px;
 }
 
 .former textarea{}
@@ -413,7 +414,7 @@ a.btn-edit{
 }
 
 .textAreaContent{
-    width: 643px;
+    width: 650px;
     display: block;
 }
 
