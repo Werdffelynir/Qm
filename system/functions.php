@@ -6,205 +6,153 @@
  * Author:  OL Werdffelynir
  * Date:    07.12.13
  */
-
+/* *****************************************************************************************
+                                         SYSTEM CONST
+   ************************************************************************************** */
+/*
+Classes
+Controllers
+Core
+Extension
+Helpers
+Models
+Structures
+*/
 /** Сепаратор, кратко */
 define("DS", DIRECTORY_SEPARATOR);
 
-/** Корень, todo: Убрать PATH_ROOT, переписать ядро на PATH */
+/** Системные пути */
+define("ROOT", dirname(__DIR__));
 define("PATH", dirname(__DIR__).DS);
-define("PATH_ROOT", dirname(__DIR__));
+define("PATH_SYS", PATH.'system'.DS);
+define("PATH_SYS_CLASSES", PATH_SYS.'Classes'.DS);
+define("PATH_SYS_CONTROLLERS", PATH_SYS.'Controllers'.DS);
+define("PATH_SYS_CORE", PATH_SYS.'Core'.DS);
+define("PATH_SYS_EXTENSION", PATH_SYS.'Extension'.DS);
+define("PATH_SYS_HELPERS", PATH_SYS.'Helpers'.DS);
+define("PATH_SYS_MODELS", PATH_SYS.'Models'.DS);
+define("PATH_SYS_STRUCTURES", PATH_SYS.'Structures'.DS);
 
-/** Пути в Системных каталогах */
-define("PATH_LIB", PATH.'lib'.DS);
-define("PATH_LIB_ABSTRACTS", PATH.'lib'.DS.'Abstracts'.DS);
-define("PATH_LIB_CLASSES", PATH.'lib'.DS.'Classes'.DS);
-define("PATH_LIB_CORE", PATH.'lib'.DS.'Core'.DS);
 
-/** Пути в преложении */
-define("APP", QmConf('pathApp'));
-define("PATH_APP", PATH.APP.DS);
-define("PATH_APP_CLASS", PATH.APP.DS.'Classes'.DS);
-define("PATH_APP_CONTROLLERS", PATH.APP.DS.'Controllers'.DS);
-define("PATH_APP_VIEWS", PATH.APP.DS.'Views'.DS);
+/** Пути преложения */
+$nameApp   = config("nameApp", "sys");
+$nameTheme = config("nameTheme", "sys");
+$baseUrl   = config("baseUrl", "app");
+define("PATH_APP", PATH.$nameApp.DS);
+define("PATH_APP_CLASSES", PATH_APP.'Classes'.DS);
+define("PATH_APP_CONTROLLERS", PATH_APP.'Controllers'.DS);
+define("PATH_APP_EXTENSION", PATH_APP.'Extension'.DS);
+define("PATH_APP_HELPERS", PATH_APP.'Helpers'.DS);
+define("PATH_APP_MODELS", PATH_APP.'Models'.DS);
+define("PATH_APP_STRUCTURES", PATH_APP.'Structures'.DS);
+define("PATH_APP_VIEWSTHEME", PATH_APP.'ViewsTheme'.DS);
+define("PATH_APP_VIEWSPARTIALS", PATH_APP.'ViewsPartials'.DS);
 
-/** Пути в шаблоне */
-define("PATH_THEME", PATH.'theme'.DS.QmConf('defaultTheme').DS);
+//ViewsPartials
+define("PATH_APP_THEME_DEFAULT", PATH_APP.$nameTheme.DS);
 
 /** URL пути, */
-define("URL", 'http://'.QmConf('baseUrl'));
-define("URL_THEME", 'http://'.QmConf('baseUrl').'/theme/'.QmConf('defaultTheme').'');
+define("URL", 'http://'.$baseUrl);
+define("URL_THEME", 'http://'.$baseUrl.'/ViewsTheme/'.$nameTheme.'');
 
 /** Системная константа, для проверки пренадлежности */
 define("QM", 'QmSYSTEM');
 
 
 
-/**
- *
- *
- * @param $file
- * @param array $data
- * @param bool $e
- * @return bool
- */
-function QmIncludeTheme($file, array $data=null, $e=false){
-
-    if(file_exists($fileName = PATH_THEME.$file.'.php')){
-
-        if(!is_null($data))
-            extract($data);
-
-        if($e)
-            echo $fileName;
-        else
-            include $fileName;
-
-    }else{
-
-        return false;
-    }
-}
+var_dump(URL);
 
 
-/**
- * @param $className
- * @param bool $exp
- * @return bool
- */
-function QmIncludeClass($className, $exp=true){
-    $exp = ($exp)? '.php' : '';
-    if(file_exists(PATH_APP_CLASS.$className.$exp)){
-        include PATH_APP_CLASS.$className.$exp;
-    }else{
-        return false;
-    }
-}
-
-
-/**
- * @param $fileName
- * @return string
- */
-function QmIncludeOb($fileName){
-    if(file_exists($fileName)){
-        ob_start();
-        include $fileName;
-        $fileCont = ob_get_contents();
-        ob_clean();
-        return $fileCont;
-    }else{
-        return false;
-    }
-}
-
+/* *****************************************************************************************
+                                        SYSTEM FUNCTION
+   ************************************************************************************** */
 
 /**
  * Метод реализации доступа к конфигурации преложения.
- *
- * @param $param string ключ массива конфигурации
- * @param $sys bool
- * @return bool
+ * @param $param ключ массива конфигурации
+ * @param $part - APP | SYS | LOAD
+ * @return array|bool|mixed
  */
-function QmConf($param=null, $sys=false){
+function config($param=false, $part='APP'){
 
-    if(file_exists(PATH_LIB."configuration.php")){
+    $part = strtolower($part);
 
-        if($sys) {
-            $config = include PATH_LIB."configuration.php";
-        } else {
-            $config = include PATH_LIB."configuration.php";
+    if($part == 'app')
+    {
 
-            if(file_exists(PATH_APP."configuration.php")) {
-                $configApp = include PATH_APP."configuration.php";
-                $config = array_merge($config, $configApp);
-            }
-        }
+        $fileApp = PATH_APP."configApplication.php";
+        $fileSys = PATH_SYS."configApplication.php";
 
-        if($param==null)
-            return $config;
+        if( file_exists($fileApp) AND file_exists($fileSys) )
+        {
+            $confApp = include $fileApp;
+            $confSys = include $fileSys;
 
-        if(array_key_exists($param, $config)){
-            return $config[$param];
+            $config = array_merge( $confApp, $confSys );
+
+            if($param==false)
+                return $config;
+            elseif(array_key_exists($param, $config))
+                return $config[$param];
+            else return false;
+
+        }else return false;
+
+    }elseif($part == 'sys'){
+
+        $file = PATH_SYS."configSystem.php";
+
+        if( file_exists($file) )
+        {
+            $config = include $file;
+            if($param==false)
+                return $config;
+            elseif(array_key_exists($param, $config))
+                return $config[$param];
+            else return false;
+
         }else{
-                return false;
+            return false;
         }
+
+    }elseif($part == 'load'){
+
+        $fileApp = PATH_APP."configAutoload.php";
+        $fileSys = PATH_SYS."configAutoload.php";
+
+        if( file_exists($fileApp) AND file_exists($fileSys) )
+        {
+            $confApp = include $fileApp;
+            $confSys = include $fileSys;
+
+            $config = array_merge( $confApp, $confSys );
+
+            if($param==false)
+                return $config;
+            elseif(array_key_exists($param, $config))
+                return $config[$param];
+            else return false;
+
+        }else return false;
+
+
     }else{
         return false;
     }
+
 }
 
 
-/** Использование класса через фу.
-function QmRout($param){
-    $Rout = new Router(PATH_ROOT);
-    $Rout->run();
-    return $Rout->$param;
-}
-*/
 
 
 
-/** Функции вывода ошибок при включеном моде дебага */
-function errorFileExists($file = null)
-{
-    $titleError = (!is_null($titleError)) ? $titleError : '';
-    $file = (!is_null($file)) ? $file : '';
-    $appMode = QmConf('appMode');
-    if($appMode == "debug")
-    {
-        print(errorStyle('Файл не найден ',' [ <b>'.$file.'</b> ] не существует!'));
-        exit;
-    }
-}
-/** Вызывать сообщение о ошибке */
-function error($titleError, $text = null)
-{
-    if(QmConf('appMode') == "debug")
-    {
-        print(errorStyle('Вызвана ошибка '.$titleError, $text));
-        exit;
-    }
-}
-/** Вызывать сообщение о ошибке */
-function QmError($titleError, $text = null)
-{
-    if(QmConf('appMode') == "debug")
-    {
-        print(errorStyle('Вызвана ошибка '.$titleError, $text));
-        exit;
-    }
-}
-/** Общий стиль для вывода ошибок */
-function errorStyle($titleError = null, $text)
-{
-    return '
-    <html>
-    <head>
-    <meta charset="utf-8">
-    <style type="text/css">
-    body{
-        background: #3C3F41;
-    }
-    </style>
-    </head>
-        <body>
 
 
-    <div style="background: #2B2B2B; color: #9C9C9C; font-family: consolas, courier new; padding: 10px 20px; ">
-        <h2>РЕЖИМ ОТЛАДКИ: '.$titleError.'</h2>
 
 
-        <code style="background: #3C3F41; color: #CC7832; padding: 5px 3px; margin: 0 auto 25px; display: block;">
-            '.$text.'
-        </code>
 
-        <hr style=" height: 1px; border:none; background: #f7002b;">
-        <small>Qm Framework version 0.1. DeBug Mode ON. </small>
-    </div>
 
-        </body>
-    </html>
-    ';
-}
+
+
 
 

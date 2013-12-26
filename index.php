@@ -1,22 +1,17 @@
 <?php
 
 /**
- * Application QM (Quick And Minimal) PHP MVC mini-framework
+ * Application Qm PHP MVC framework
  *
  */
 
 /** Bases system functions */
-include "lib/functions.php";
+include "system/functions.php";
 
-/** Loader structure and routs classes */
-include "lib/bootstrap.php";
+/** Loader structure main classes */
+include "system/bootstrap.php";
 
-/** Go!!! */
-$app = new App();
+/** Run core
+$app = new \Core\App();
 
-/*
-1.index
-    - bootstrap
-        -
-*/
-
+$app->run();*/
