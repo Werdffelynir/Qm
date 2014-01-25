@@ -104,6 +104,8 @@ class SimplePDO {
      * ->query( "SELECT title, article, date FROM blog WHERE id=:id",
      *      array('id'=> '215')
      *      )
+     * ->row()
+     * ->all()
      * <pre>
      * @param string $sql   Принимает открытый SQL запрос или безопасный
      * @param array $data   Значения для безопасного запроса

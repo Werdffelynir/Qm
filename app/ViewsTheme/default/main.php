@@ -7,8 +7,8 @@
     <head>
     <meta charset="utf-8">
         <title><?php $this->data("pageTitle"); ?></title>
-        <link rel="stylesheet" href="<?php echo App::$urlTheme; ?>/css/lite.css" type="text/css" />
-        <link rel="stylesheet" href="<?php echo App::$urlTheme; ?>/css/default.css" type="text/css" />
+        <link rel="stylesheet" href="<?php echo App::$urlTheme; ?>/csss/lite.css" type="text/css" />
+        <link rel="stylesheet" href="<?php echo App::$urlTheme; ?>/csss/default.css" type="text/css" />
     </head>
     <body>
 

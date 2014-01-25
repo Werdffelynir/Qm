@@ -1,10 +1,9 @@
 <?php
 
-class Controller extends Rendering{
+class Controller extends Common{
 
 
     protected $routeReName = array();
-
 
     /**
      * Розпаковывает масивы (стандартная PHP функция)
@@ -20,13 +19,13 @@ class Controller extends Rendering{
      * Имя шаблона, устанавлеваеться с конфигурации lib/config.php
      * если в конфигурации не задано, используеться это свойство
      */
-    protected $layout;
+    protected $layout=null;
 
 
     /**
      * Временно хранит имена видов
      */
-    protected $view;
+    protected $view=null;
 
 
     /**
@@ -70,11 +69,6 @@ class Controller extends Rendering{
      */
     public $classesData = array();
 
-    /**
-     * @var array Массив содержит зарегестрированые хуки
-     */
-    public static $_hookBind=array();
-
 
     /**
      * Конструктор задает последовательность загрузки методов
@@ -86,15 +80,25 @@ class Controller extends Rendering{
         $this->init();
 
         /** @var  layout входящий файл темы по умролчанию */
-        $this->layout   = App::$config["defaultViewStartFile"];
+        if(is_null($this->layout))
+            $this->layout   = App::$config["defaultThemeStartFile"];
         /** @var  layout вид основной по умочанию */
-        $this->view     = App::$config["defaultThemeStartFile"];
+        if(is_null($this->view))
+            $this->view     = App::$config["defaultViewStartFile"];
+        //$actions = $this->actions();
+        //if(!empty($actions))
+            $this->view     = App::$config["defaultViewStartFile"];
+
         /** @var  url */
         $this->url      = App::$url;
 
         $this->after();
     }
 
+    /**
+     * @return array
+     */
+    public function actions(){return array();}
 
 
     /**
@@ -135,7 +139,7 @@ class Controller extends Rendering{
     public function show($viewName=false, $nested=false, $theme=false)
     {
 
-        $viewName = ($viewName) ? $viewName : App::$config['defaultViewStartFile'];
+        $viewName = ($viewName) ? $viewName : $this->view;
 
         /** Если указано распаковка с масива в контролере, вложеные двнные
          *  будут доступны в виде в роспакованой форме */
@@ -288,7 +292,7 @@ class Controller extends Rendering{
      *  ));
      *
      * для контролеров, без layout импользывать четвертый параметр с true
-     *  out('name_view', true);
+     *  out('__namePosition__', '__nameView__', $myArrayData, true);
      *
      * Нзначение вывода в шаблоне (theme) layout. Происходит другим методом outTheme
      *  outTheme('__namePosition__', $OmData);
@@ -311,8 +315,6 @@ class Controller extends Rendering{
 
             ob_start();
 
-            $this->beforeOut();
-
             foreach ($position as $output) {
                 extract($output[2]);
                 include PATH_APP_VIEWSPARTIALS.$output[1].".php";
@@ -330,7 +332,7 @@ class Controller extends Rendering{
             if(!$nested){
                 $OmData = array(
                     'position' => $position,
-                    'view' => $view,
+                    'view' => ($view) ? $view : $this->view,
                     'data' => $data,
                 );
 
@@ -339,17 +341,7 @@ class Controller extends Rendering{
                 include PATH_APP_VIEWSPARTIALS.$view.".php";
             }
         }
-
-        $this->afterOut();
     }
-    /**
-     * Выполняеься до out()
-     */
-    public function beforeOut(){}
-    /**
-     * Выполняеься после out()
-     */
-    public function afterOut(){}
 
 
     /**
@@ -359,24 +351,30 @@ class Controller extends Rendering{
      *<pre>
      * Пример:
      *
-     * @param string    $position
-     * @param array     $OmData
+     * @param string        $position
+     * @param array|string  $OmData
      */
     public function outTheme($position, $OmData)
     {
+
         $OmDataTemp = $OmData;
-        if(count($OmDataTemp) > 1 ){
+
+        if( !isset($OmDataTemp["position"]) ){
             foreach ($OmDataTemp as $OmDataValue) {
+
                 if($position == $OmDataValue['position']){
                     $OmData['position'] = $OmDataValue['position'];
                     $OmData['view'] = $OmDataValue['view'];
                     $OmData['data'] = $OmDataValue['data'];
                 }
+
             }
         }
 
         if($position == $OmData['position']){
-            extract($OmData['data']);
+            if(isset($OmData['data']) AND is_array($OmData['data']))
+                extract($OmData['data']);
+
             include PATH_APP_VIEWSPARTIALS.$OmData['view'].".php";
         }
         unset($OmData);
@@ -389,44 +387,71 @@ class Controller extends Rendering{
      *
      *<pre>
      * Пример:
+     * // Одиночный вывод
+     * $this->render('__namePosition__', '__nameView__', array('title'=>'My test title'));
+     *
+     * // массовый вывод
      * 'blockName_*' - перемнная в основном шаблоне 'main.php' по умолчанию,
      * 'viewLeft'    - вид в калоге Views
      * 'keyLeft'     - переменная которая будет видна в виде 'viewLeft'
      *
      * $this->render(array(
-     *    'blockName_Left'      => array('viewLeft', array('keyLeft'->'My data')),
-     *    'blockName_General'   => array('viewContent', array('keyConten'->'My data')),
-     *    'blockName_Right'     => array('viewRight', array('keyRight'->'My data')),
+     *    'blockName_Left'      => array('viewLeft', array('keyLeft'=>'My data')),
+     *    'blockName_General'   => array('viewContent', array('keyContent'=>'My data')),
+     *    'blockName_Right'     => array('viewRight', array('keyRight'=>'My data')),
      *    )
      *);
      *
-     * В шаблоне позиции назначать следующим образом:
+     * //В шаблоне позиции назначать следующим образом:
      *  <?php echo $this->blockName_Left;
      * </pre>
      *
-     * @param array $viewsAndData
+     * @param array|string  $dataPos    если вамив то массовый вывод, строка позиция
+     * @param               $view       если одиночный вид
+     * @param array         $dataArr    если одиночный данные в виде массива
      */
-    public function render( array $viewsAndData )
+    public function render( $dataPos, $view=false, array $dataArr=array() )
     {
-        $this->beforeRender();
-        $data = array();
-        foreach ($viewsAndData as $keyBlockName => $dataView) {
-            extract($dataView[1]);
-            $keyInclude = PATH_APP_VIEWSPARTIALS.$dataView[0].".php";
+        if(is_array($dataPos)){
+            foreach ($dataPos as $keyBlockName => $dataView) {
+                if(isset($dataView[1]) AND is_array($dataView[1]))
+                    extract($dataView[1]);
+                $keyInclude = PATH_APP_VIEWSPARTIALS.$dataView[0].".php";
+                ob_start();
+                include $keyInclude;
+                $this->$keyBlockName = ob_get_clean();
+            }
+        }elseif(is_string($dataPos)){
+            if(!$view) $view = $this->view;
+            if(!empty($dataArr)) extract($dataArr);
+            $keyInclude = PATH_APP_VIEWSPARTIALS.$view.".php";
             ob_start();
             include $keyInclude;
-            $this->$keyBlockName = ob_get_contents();
-            ob_clean();
+            $this->$dataPos = ob_get_clean();
         }
         include PATH_APP_THEME.$this->layout.".php";
-        $this->afterRender();
+
     }
-    public function beforeRender(){}
-    public function afterRender(){}
-
-
 
     /**
+     * Метод вывода в шаблон видов с данными, совметсный с методом render()
+     *
+     * <pre>
+     * Скорость: в 10-100 раз медленее чем выводить напрямую
+     * $this->__namePosition__ (0.0008 / 1000 it)
+     * $this->renderTheme( __namePosition__ ) (0.0222 / 1000 it)
+     * </pre>
+     *
+     * @param string    $renderPosition     названеи позиции указаной в контролере методом render()
+     */
+    public function renderTheme( $renderPosition )
+    {
+        if(isset($this->$renderPosition))
+            echo $this->$renderPosition;
+    }
+
+
+        /**
      * Регистрация скрипта javascript в области видимости контролера
      *
      * <pre>
@@ -469,7 +494,14 @@ class Controller extends Rendering{
      */
     public function registerStyle( array $styleData )
     {
-        //if(file_exists($styleData['path'])){
+        /*
+        if(isset($styleData['path']) AND file_exists($styleData['path'])){
+            $path = $styleData['path'];
+        }else{
+            $path = 'ERROR. file not exists! '.$styleData['path'];
+        }
+        */
+
             $this->_styles[$styleData['name']] = array(
                 'url' => $styleData['url'],
                 'path' => (isset($styleData['path'])) ? $styleData['path'] : null,
@@ -477,9 +509,7 @@ class Controller extends Rendering{
                 'showIn' => (isset($styleData['showIn'])) ? $styleData['showIn'] : "header",
                 'position' => count($this->_styles)+1,
             );
-        //}else{
-        //    return false;
-        //}
+
     }
 
 
@@ -572,7 +602,7 @@ class Controller extends Rendering{
                         if( $disabled == 'disabled')
                             unset($this->styles[$regStyle]);
                         else
-                            $this->styles[$regStyle] = $_script;
+                            $this->styles[$regStyle] = $_styles;
                     }
                 }
             }
@@ -599,25 +629,18 @@ class Controller extends Rendering{
     public function showScripts($showIn='header', $scrName=false)
     {
         $temp_scr = "";
-        //$baseUrl = App::$config['baseUrl'];
 
         if($scrName) {
             foreach( $this->scripts as $scripts){
                 if($scripts['name'] == $scrName ){
-                    //$regScriptUrl = substr($scripts['path'], strpos($scripts['path'],$baseUrl) + strlen($baseUrl) + 1 ) ;
-                    //$regScriptUrl = $this->url.'/'.str_replace('\\','/',$regScriptUrl);
                     $temp_scr .= '<script type="text/javascript" src="'.$scripts['url'].'"></script>'."\n";
                 }
             }
             echo $temp_scr;
 
         }elseif($showIn == 'header') {
-            //var_dump($this->scripts);
             foreach( $this->scripts as $scripts){
-
                 if($scripts['showIn'] == $showIn ){
-                    //$regScriptUrl = substr($scripts['path'], strpos($scripts['path'], $baseUrl) + strlen($baseUrl) + 1 ) ;
-                    //$regScriptUrl = $this->url.'/'.str_replace('\\','/',$regScriptUrl);
                     $temp_scr .= '<script type="text/javascript" src="'.$scripts['url'].'"></script>'."\n";
                 }
             }
@@ -625,10 +648,7 @@ class Controller extends Rendering{
 
         } elseif($showIn == 'footer') {
             foreach( $this->scripts as $scripts){
-
                 if($scripts['showIn'] == $showIn ){
-                    //$regScriptUrl = substr($scripts['path'], strpos($scripts['path'], $baseUrl) + strlen($baseUrl) + 1 ) ;
-                    //$regScriptUrl = $this->url.'/'.str_replace('\\','/',$regScriptUrl);
                     $temp_scr .= '<script type="text/javascript" src="'.$scripts['url'].'"></script>'."\n";
                 }
             }
@@ -656,14 +676,9 @@ class Controller extends Rendering{
      */
     public function showStyles()
     {
-        //$baseUrl = App::$config['baseUrl'];
-
         if(!empty($this->styles)){
             $temp_scr = "";
             foreach( $this->styles as $styles){
-                //$regStyleUrl = substr($styles['path'], strpos($styles['path'], $baseUrl) + strlen($baseUrl) + 1 ) ;
-
-                //$regStyleUrl = $this->url.'/'.str_replace('\\','/',$regStyleUrl);
                 $temp_scr .= '<link rel="stylesheet" type="text/css" href="'.$styles['url'].'" />'."\n";
             }
             echo $temp_scr;
@@ -682,283 +697,6 @@ class Controller extends Rendering{
         $toHead = $this->showStyles();
         $toHead .= $this->showScripts('header');
         return $toHead;
-    }
-
-
-    /**
-     * Мнтод для проверки являеться ли запрос через AJAX
-     * @return bool
-     */
-    public function isAjax()
-    {
-        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
-            strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-
-    /**
-     * Метод использования передаваемых парметров через строку запросов.
-     * основное предназначение это передача неких параметров, но все же
-     * можно найти множество других приминений для этого метода.
-     *
-     * <pre>
-     * Например: http://qm.loc/edit/page/id/215/article/sun-light
-     * /edit/page/ - это контролер и екшен, они пропускаються
-     * $this->urlParam()            - id
-     * $this->urlParam('id')        - 215
-     * $this->urlParam('article')   - sun-light
-     * $this->urlParam('allArray')  - масив всех елементов "Array ( [1] => edit [2] => page [3] => id [4] => 215 [5]..."
-     * $this->urlParam('allString') - строку всех елеметов "edit/page/id/215/article/sun-light"
-     * $this->urlParam('edit', 3)   - 215 (3 шага от 'edit')
-     *
-     * </pre>
-     * @param bool $param
-     * @param int $el
-     * @return array|string
-     */
-    public function urlParam($param=false, $el=1)
-    {
-        if(!$param) {
-            return App::$requestArray[3];
-        }elseif($param == 'allArray'){
-            return App::$requestArray;
-        }elseif($param == 'allString'){
-            return App::$request;
-        }else{
-            $paramTemp = substr(App::$request, strpos(App::$request, $param)+strlen($param)+1);
-            $paramTemp = explode('/', $paramTemp);
-
-            if($el > 0)
-                return $paramTemp[$el-1];
-            else
-                return $param;
-        }
-    }
-
-
-    /**
-     * Метод для подключение моделей, параметром берет созданый раньше класс Метода
-     * Возвращает обект модели с ресурсом подключеным к базе данных
-     *
-     * @param  string    $modelPath   Имя класса модели
-     * @return bool|object
-     */
-    /*public function model( $modelName )
-    {
-        if( !class_exists($modelName) AND file_exists(PATH_APP_MODELS.$modelName.".php")) {
-            include PATH_APP_MODELS.$modelName.".php";
-            $newModel = new $modelName();
-            return (object) $newModel;
-        }else{
-            return false;
-        }
-    }*/
-    public function model( $modelPath )
-    {
-        if(file_exists(PATH_APP_MODELS.$modelPath.".php")) {
-
-            if(strpos($modelPath, '/') === false){
-
-                if(!class_exists($modelPath)){
-                    include_once PATH_APP_MODELS.$modelPath.".php";
-                }
-
-                $newModel = new $modelPath();
-                return (object) $newModel;
-
-            }else{
-                $modelArrayPath = explode('/',$modelPath);
-                $modelName = $modelArrayPath[sizeof($modelArrayPath)-1];
-
-                if(!class_exists($modelName)){
-                    include_once PATH_APP_MODELS.$modelPath.".php";
-                }
-
-                $model = new $modelName();
-                return (object) $model;
-            }
-        }else{
-            return false;
-        }
-    }
-
-    /**
-     * Метод алис на статический метод loadClasses() класса App
-     *
-     * @param string    $fileName   Имя класса/файла
-     * @param bool      $newObj     По умолчанию TRUE возвращает новый обект, FALSE только подключает
-     * @return bool
-     */
-    public function classes( $fileName , $newObj=true)
-    {
-        return App::loadClasses( $fileName , $newObj);
-    }
-
-    /**
-     * Метод алис на статический метод loadHelper() класса App
-     *
-     * @param string    $fileName   Имя класса/файла
-     * @param bool      $newObj     По умолчанию TRUE возвращает новый обект, FALSE только подключает
-     * @return bool
-     */
-    public function helper( $fileName,$newObj=true )
-    {
-        return App::loadHelper( $fileName,$newObj=true );
-    }
-
-    /**
-     * Метод алис на статический метод loadExtension() класса App
-     *
-     * @param string    $fileName   Имя подключаемого файла
-     * @return bool
-     */
-    public function ext( $fileName )
-    {
-        return App::loadExtension( $fileName );
-    }
-
-
-    /**
-     * Метод алис на статический метод redirect() класса App
-     *
-     * @param string    $url    переадресация на URL
-     * @param int       $delay  задержка
-     * @param int       $code   код заголовка
-     */
-    public static function redirect($url, $delay = 0, $code = 302)
-    {
-        App::redirect($url, $delay, $code);
-    }
-
-
-    /**
-     * Регистрация или вызов обработчиков событий, хука, в областе видемости. Первый аргумент
-     * имя хука, второй анонимная функция или название метода в контролере, трений
-     * задает аргументы для назначиного обработчика в втором аргументе. Если указан только первый
-     * аргумент возвращает екземпляр этого хука, если имя не зарегестрировано возвращает NULL.
-     *
-     * <pre>
-     * Пример:
-     *  $this->hookRegister('hook-00', function(){ echo '$this->hookRegister'; });
-     *  $this->hookRegister('hook-01', 'showEvent');
-     *  $this->hookRegister('hook-02', 'showName', array('param1'));
-     *  $this->hookRegister('hook-03', 'showNameTwo', array('param1','param2'));
-     * </pre>
-     *
-     * @param string    $event      Название евента
-     * @param null      $callback   Обработчик события обратного вызова
-     * @param array     $params     Передаваемые параметры
-     * @return array
-     */
-    public function hookRegister($event, $callback = null, array $params = array())
-    {
-        if (func_num_args() > 2) {
-            self::$_hookBind[$event] = array($callback, $params);
-        } elseif (func_num_args() > 1) {
-            self::$_hookBind[$event] = array($callback);
-        } else {
-            return self::$_hookBind;
-        }
-    }
-
-    /**
-     * Тригер для зарегестрированого евента. Первый аргумент зарегестрированый ранее хук
-     * методом hookRegister(), второй параметры для зарегестрированого обработчика.
-     * Возвращает исключение в случае если хук не зарегестрирован
-     *
-     * <pre>
-     * Пример:
-     *  $this->hookTrigger('hook-01');
-     *  $this->hookTrigger('hook-02', array('param1'));
-     *  $this->hookTrigger('hook-03', array('param1','param2'));
-     * </pre>
-     *
-     * @param string    $event
-     * @param array     $params
-     * @throws RuntimeException
-     */
-    public function hookTrigger($event, array $params = array())
-    {
-
-        if (isset(self::$_hookBind[$event]) AND $handlers = self::$_hookBind[$event]) {
-
-            $handlersParam = (isset($handlers[1])) ? $handlers[1] : false;
-            $handlersParam = (!empty($params)) ? $params : $handlersParam;
-
-            if(is_callable($handlers[0])) {
-                call_user_func($handlers[0]);
-            } elseif(method_exists($this, $handlers[0]) AND $handlersParam) {
-                call_user_func_array(array($this, $handlers[0]), $handlersParam);
-            } elseif(method_exists($this, $handlers[0])) {
-                call_user_func(array($this, $handlers[0]));
-            } else
-                throw new \RuntimeException('invalid callable');
-        }
-    }
-
-    /**
-     * @var array
-     */
-    private static $_filterBind = array();
-
-    /**
-     * @param $filterName
-     * @param $callable
-     * @param int $acceptedArgs
-     */
-    public function filterRegister($filterName, $callable, $acceptedArgs = 1){
-        if(is_callable($callable)){
-            self::$_filterBind[$filterName]['callable'] = $callable;
-            self::$_filterBind[$filterName]['args'] = $acceptedArgs;
-        }
-    }
-
-    /**
-     * @param $filterName
-     * @param $args
-     * @throws Exception
-     */
-    public function filterTrigger($filterName, $args) {
-        if(isset(self::$_filterBind[$filterName])) {
-            if ( is_string($args) ) {
-                call_user_func(array($this, self::$_filterBind[$filterName]['callable']), $args);
-            }elseif( is_array($args) AND self::$_filterBind[$filterName]['args'] == sizeof($args) ){
-                call_user_func_array(array($this, self::$_filterBind[$filterName]['callable']), $args);
-            }
-        } else {
-            throw new Exception('invalid callable or invalid num arguments');
-        }
-    }
-
-
-
-    /**
-     * verification => ifExists , $function='isset-empty'
-     * Метод проверки данных на существование или дугой тип
-     *
-     * @param string    $value      Данные что проверяем
-     * @return null
-     * @throws Exception
-     */
-    public function isExists($value){
-        return (isset($value) AND !empty($value)) ? $value : null;
-        /*switch($function){
-            case "isset":
-                return (isset($value)) ? $value : null;
-                break;
-            case "empty":
-                return (!empty($value)) ? $value : null;
-                break;
-            case "isset-empty":
-                return (isset($value) AND !empty($value)) ? $value : null;
-                break;
-            default:
-                throw new Exception("Ошибка второй параметр не зарегестрирован в методе.");
-        }*/
     }
 
 

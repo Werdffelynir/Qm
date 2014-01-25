@@ -6,6 +6,14 @@ class ControllerIndex extends BaseSiteController
     protected $userId   = false;
     protected $userName = false;
 
+    public function actions(){
+        return array(
+            'one'   =>'Components/compOne',
+            'two'   =>'Components/compTwo',
+            'three' =>'Components/compThree',
+        );
+    }
+
     public function after(){}
 
     public function actionIndex()
@@ -67,10 +75,6 @@ class ControllerIndex extends BaseSiteController
         echo "<h3>".$text." handlers with App Filter</h3>";
     }
 
-
-
-
-
     public function actionLogin()
     {
         echo "actionLogin";
@@ -85,7 +89,6 @@ class ControllerIndex extends BaseSiteController
         $this->data['content'] = $option;
 
         $this->show('main');
-
     }
 
 }

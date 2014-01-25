@@ -57,7 +57,7 @@ return array(
     "defaultViewStartFile"      =>"main",
 
     /* Файл запуска оновного шаблона "defaultTheme", находиться в дир. "theme/__defaultTheme__/__defaultLayout__.php" */
-    "defaultThemeStartFile"     =>"template",
+    "defaultThemeStartFile"     =>"main",
 
     /* Шаблон для страницы 404 */
     "Error 404"                 =>"error404.php",
@@ -87,7 +87,9 @@ return array(
     "classesSysAutoload" => array(
         "autoload"  => false,
         "classes" => array(
-            //"Config",
+            "Common",
+            "Components",
+            "Action",
             "SafePDO",
             "SimplePDO",
         ),
