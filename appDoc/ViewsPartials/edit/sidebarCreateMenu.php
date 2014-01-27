@@ -1,4 +1,4 @@
-<h2 class="sidebartitle">Админ-навигация</h2>
+<h2 class="sidebartitle">Редактирование данных</h2>
 
 <ul>
     <li><a href="<?php echo URL;?>/edit/create">Создать новую страницу</a></li>

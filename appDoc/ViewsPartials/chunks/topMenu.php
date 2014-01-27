@@ -4,7 +4,7 @@
 } ?>
 
     <li <?php activeMenu(""); ?> ><a href="<?=App::$url?>/">Home</a></li>
-    <li <?php activeMenu("docs"); ?> ><a href="<?=App::$url?>/docs">Documentation</a></li>
+    <li <?php activeMenu("doc"); ?> ><a href="<?=App::$url?>/doc">Documentation</a></li>
     <li <?php activeMenu("controllers"); ?> ><a href="<?=App::$url?>/controllers">Controllers</a></li>
     <li <?php activeMenu("models"); ?> ><a href="<?=App::$url?>/models">Models</a></li>
     <li <?php activeMenu("views"); ?> ><a href="<?=App::$url?>/views">Views</a></li>

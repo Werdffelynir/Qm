@@ -1,3 +1,3 @@
-<h2 class="sidebartitle">Основные Страницы</h2>
+<h2 class="sidebartitle">Список Основных Страниц</h2>
 
 <?php echo $menuPage;?>

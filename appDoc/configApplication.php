@@ -43,12 +43,28 @@ return array(
     /* Настройка роутингов методов контролеров преложения */
     "routeReName" => array(
         "home" => "index/index",
-        /*"actionRouteTestTwo" => "reTestTwo",*/
+        "doc" => "index/doc",
+        "controllers" => "index/controllers",
+        "models" => "index/models",
+        "views" => "index/views",
+        "download" => "index/download",
+        "admin" => "index/edit",
     ),
     /*
     "routeReName" => array(
         array("actionRouteTestOne", "reTestOne"),
         array("actionRouteTestTwo", "reTestTwo"),
+    ),
+     */
+    /*
+    "routeRegExr" => array(
+        "home" => "index/index",
+        "doc" => "index/doc",
+        "controllers" => "index/controllers",
+        "models" => "index/models",
+        "views" => "index/views",
+        "download" => "index/downloads",
+        "edit" => "index/edit",
     ),
      */
 
@@ -74,7 +90,7 @@ return array(
 	    "db" => array(
 	        "driver"  => "sqlite",
 	        "class"   => "SimplePDO",
-	        "path"    => dirname(__DIR__)."/app/DataBase/QmDataBase.sqlite",
+	        "path"    => dirname(__DIR__)."/appDoc/DataBase/QmDataBase.sqlite",
 	    ),
 	    /*
 	    "dbTwo" => array(

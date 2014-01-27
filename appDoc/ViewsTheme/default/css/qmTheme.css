@@ -300,8 +300,14 @@ color: #E0E0FF;
     color: #050f18;
     width: 324px;
     margin-bottom: 10px;
+    border: 1px solid #5e9ffa;
 }
-
+.former input[type="text"]{
+    padding: 5px 8px;
+}
+.former input, .former select:focus, .former textarea{
+    outline: none;
+}
 .former textarea{}
 .former input[name="title"]{
     width: 450px;

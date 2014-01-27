@@ -13,27 +13,44 @@ class ControllerEdit extends BaseAdminController{
     /** Обект модели */
     public $modelEdit;
 
+    // Списки категорий и суб категорий.
     public $categoryDocumentation = array('-','Home','Documentation','Controllers','Models','Views','Structure','Quick start','Download' );
     public $subCategoryDocumentation = array('To all','Helpers','Functions' );
 
 
     /**
-     *
+     * Общие настройки для контролера.
      */
     public function after()
     {
-        $this->data["pageTitle"] = "Edit Docs";
 
-        $this->setChunk('sidebarFirst','edit/sidebarCreateMenu');
+        // Отключение 'jquery'
+        #$this->addScript('jquery', 'disabled');
 
+        // Подключение в header 'nicEdit', 'themeScript'
+        $this->addScript('nicEdit', 'header');
+        $this->addScript('themeScript', 'header');
+
+        // Общий заголовок
+        $this->data["title"] = "Edit Docs";
+
+        // Создание экземпляра модели
+        // Назначение его свойству $this->modelEdit, которое может используваться
+        // в других методах
         $this->modelEdit = $this->model("Edit");
+
+        // Обращение к методу модели, выборка основных статей документации
         $menuPage = $this->modelEdit->getMenu();
 
+        // Формировние меню
         $menu = "<ul>";
         foreach($menuPage as $title)
             $menu .= "<li><a href=\"".URL."/edit/page/".$title['id']."\">".$title['title']."</a></li>";
         $menu .= "</ul>";
 
+        // Подключение чанка Редактирование данных
+        $this->setChunk('sidebarFirst','edit/sidebarCreateMenu');
+        // Подключение чанка Список Основных Страниц
         $this->setChunk('sidebarSecond','edit/sidebarEditMenu', array("menuPage"=>$menu));
     }
 
@@ -44,15 +61,10 @@ class ControllerEdit extends BaseAdminController{
      */
     public function actionIndex()
     {
-        /** подключение скриптов на главной странице она же список всех страниц имеющихся */
-        //$this->addScript('jquery');
-        //$this->addScript('themeScript');
-
-        //var_dump($this->styles);
-
-        $this->data['title'] = 'Список всех сатей!';
         $allPages = $this->modelEdit->getPages();
-        $this->data['content'] = $this->partial('edit/pagesList', array('pagesList'=>$allPages));
+
+        $this->data['mainTitle'] = 'Список всех сатей!';
+        $this->data['mainContent'] = $this->partial('edit/pagesList', array('pagesList'=>$allPages));
 
         $this->show('main');
     }
@@ -64,13 +76,6 @@ class ControllerEdit extends BaseAdminController{
      */
     public function actionCreate()
     {
-        // Отключение 'jquery'
-        $this->addScript('jquery', 'disabled');
-
-        // Подключение в футере 'nicEdit', 'themeScript'
-        $this->addScript('nicEdit', 'header');
-        $this->addScript('themeScript', 'header');
-
         // Импорт части вида в общий контент, тут я просто перечесляю необходимые мне катгории.
         $formEdit = $this->partial('edit/formEdit',  array(
             'typeID'       => "create",                     // тип формы
@@ -87,8 +92,8 @@ class ControllerEdit extends BaseAdminController{
             'id'         => null,  // ...
         ));
 
-        $this->data['title'] = 'Создание новой страницы';
-        $this->data['content'] = $formEdit;
+        $this->data['mainTitle'] = 'Создание новой страницы';
+        $this->data['mainContent'] = $formEdit;
         $this->show('main');
     }
 
@@ -98,34 +103,12 @@ class ControllerEdit extends BaseAdminController{
      */
     public function actionPage()
     {
-        //var_dump();
-        //$cont = 'Page id: '. $this->urlParam('edit', 1); //App::$requestFull[1];,
         $urlParam = $this->urlParam('edit', 2);
 
         if(!empty($urlParam)){
 
-            //$this->extracted = true;
-
-            // Отключение 'jquery'
-            //$this->addScript('jquery', 'disabled');
-            // Подключение в футере 'nicEdit', 'themeScript'
-            $this->addScript('nicEdit', 'header');
-            $this->addScript('themeScript', 'header');
-
-            //var_dump($this->_scripts);
-
             $cont = (int)$urlParam;
             $contentToEdit = $this->modelEdit->getById("pages", $cont);
-
-            /** Query content for editor
-            $this->data['form_title']       = $contentToEdit['title'];
-            $this->data['form_content']     = $contentToEdit['content'];
-            $this->data['form_category']    = $contentToEdit['category'];
-            $this->data['form_subcategory'] = $contentToEdit['subcategory'];
-            $this->data['form_datetime']    = $contentToEdit['datetime'];
-            $this->data['form_author']      = $contentToEdit['author'];
-            $this->data['form_id']          = $contentToEdit['id'];
-             */
 
             /** Импорт части вида в общий контент, тут я просто перечесляю необходимые мне катгории.*/
             $formEdit = $this->partial('edit/formEdit',  array(
@@ -144,17 +127,9 @@ class ControllerEdit extends BaseAdminController{
             ));
 
             /** View content page */
-            // $this->data['title']    = 'Редактирование:';
-            // $this->data['content']  = $formEdit;
-
-            //$this->data['category'] = $this->categoryDocumentation;
-
-            $this->data['title']   = 'Редактирование';
-            $this->data['content'] = $formEdit;
+            $this->data['mainTitle']   = 'Редактирование';
+            $this->data['mainContent'] = $formEdit;
             $this->show('main');
-
-            /** Include partial template */
-            //$this->show('pEdit/formEdit');
         }else{
             App::redirect(App::$url.'/edit');
         }
@@ -183,8 +158,10 @@ class ControllerEdit extends BaseAdminController{
                 $result = $this->modelEdit->saveNewPage($savePage);
 
                 if($result){
-                    App::redirect(App::$url.'/edit');
+                    App::flashArray('update', array('type'=>'success','message'=>'Запись в базе данных успешно создана!','class'=>'fleshsuccess'));
+                    App::redirect(App::$url.'/edit/page/'.$result);
                 }else{
+                    App::flashArray('update', array('type'=>'error','message'=>'Ошибка записи  в базу данных!','class'=>'flesherror'));
                     App::redirect(App::$url.'/edit/create');
                 }
             }
@@ -199,6 +176,7 @@ class ControllerEdit extends BaseAdminController{
                     'subcategory'   => $_POST['subcategory'],
                     'content'       => htmlspecialchars($_POST['content']),
                     'datetime'      => time(),
+                    'author'        => QmUser::id(),
                     'id'            => $_POST['id']
                 ));
 
@@ -211,30 +189,10 @@ class ControllerEdit extends BaseAdminController{
                 }
             }
 
-
-
-
-
-
         }else{
             App::redirect(App::$url.'/edit/create');
         }
     }
-
-
-
-    /**
-     *
-
-    public function actionCreateSubPage()
-    {
-        $this->data['title'] = 'actionCreateSubPage:';
-        $this->data['content'] = '$menu';
-        $this->show('main');
-    }*/
-
-
-
 
 
     /**

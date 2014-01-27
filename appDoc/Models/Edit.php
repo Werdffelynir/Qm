@@ -5,7 +5,6 @@
  *
  * вам необходимо провести реорганизацию кода
  */
-
 class Edit extends Model
 {
 
@@ -15,7 +14,7 @@ class Edit extends Model
      */
     public function getMenu()
     {
-        return  $this->getAll("pages", array("id", "title"), "type='Top Menu'");
+        return $this->getAll("pages", array("id", "title"), "type='Top Menu'");
     }
 
     /**
@@ -24,7 +23,7 @@ class Edit extends Model
      */
     public function getPages()
     {
-        return  $this->getAll("pages");
+        return $this->getAll("pages");
     }
 
     /**
@@ -34,17 +33,30 @@ class Edit extends Model
      */
     public function saveNewPage(array $data)
     {
-        $saveResult = $this->db->query("INSERT INTO pages (title,link,category,content,datetime,author) VALUES (:title,:link,:category,:content,:datetime,:author)", array(
-                'title'     => $data['title'],
-                'link'      => $data['link'],
-                'category'  => $data['category'],
-                'content'   => $data['content'],
-                'datetime'  => $data['datetime'],
-                'author'    => $data['author']
+        $saveResult = $this->db->query("INSERT
+            INTO pages (title,link,category,content,datetime,author)
+            VALUES (:title,:type,:link,:category,:subcategory,:content,:datetime,:author)",
+            array(
+                'title' => $data['title'],
+                'type' => $data['type'],
+                'link' => $data['link'],
+                'category' => $data['category'],
+                'subcategory' => $data['subcategory'],
+                'content' => $data['content'],
+                'datetime' => $data['datetime'],
+                'author' => $data['author']
             )
         );
 
-        return $saveResult;
+        if ($saveResult) {
+            $sql = "SELECT id FROM pages ORDER BY id DESC";
+            $lestQuery = $this->db->query($sql)->row();
+            return $lestQuery['id'];
+        } else {
+            return false;
+        }
+
+
     }
 
 
@@ -61,24 +73,25 @@ class Edit extends Model
                     category=:category,
                     subcategory=:subcategory,
                     content=:content,
-                    datetime=:datetime
+                    datetime=:datetime,
+                    author=:author
                 WHERE id=:id;";
 
         $updateResult = $this->db->query($sql, array(
-                'title'     => $data['title'],
-                'type'      => $data['type'],
-                'link'      => $data['link'],
-                'category'  => $data['category'],
-                'subcategory'=>$data['subcategory'],
-                'content'   => $data['content'],
-                'datetime'  => $data['datetime'],
-                'id'        => $data['id']
+                'title' => $data['title'],
+                'type' => $data['type'],
+                'link' => $data['link'],
+                'category' => $data['category'],
+                'subcategory' => $data['subcategory'],
+                'content' => $data['content'],
+                'datetime' => $data['datetime'],
+                'author' => $data['author'],
+                'id' => $data['id']
             )
         );
 
         return $updateResult;
     }
-
 
 
     /**
@@ -88,7 +101,7 @@ class Edit extends Model
      */
     public function deletePage($id)
     {
-        $deleteResult = $this->db->query("DELETE FROM pages WHERE id=:id", array("id"=>$id));
+        $deleteResult = $this->db->query("DELETE FROM pages WHERE id=:id", array("id" => $id));
         return $deleteResult;
     }
 

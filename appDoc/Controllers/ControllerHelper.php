@@ -23,8 +23,8 @@ class ControllerHelper extends BaseSiteController{
         $ModelPages = $this->model("Pages");
         $getCurrent = $ModelPages->getPageByLink('qs');
 
-        $this->data['title'] = $getCurrent['title'];
-        $this->data['content'] = htmlspecialchars_decode($getCurrent['content']);
+        $this->data['mainTitle'] = $getCurrent['title'];
+        $this->data['mainContent'] = htmlspecialchars_decode($getCurrent['content']);
         $this->show('main');
     }
 
@@ -38,13 +38,13 @@ class ControllerHelper extends BaseSiteController{
         $getCurrent = $ModelPages->getPageByLink($getQmPage);
 
         if(!$getCurrent){
-            $this->data['title'] = 'Записи не существует в БД!';
-            $this->data['content'] = '';
+            $this->data['mainTitle'] = 'Записи не существует в БД!';
+            $this->data['mainContent'] = '';
             $this->show('main');
         }else{
-            $this->data['title'] = $getCurrent['title'];
-            $this->data['content'] = htmlspecialchars_decode($getCurrent['content']);
-            $this->show();
+            $this->data['mainTitle'] = $getCurrent['title'];
+            $this->data['mainContent'] = htmlspecialchars_decode($getCurrent['content']);
+            $this->show('main');
         }
     }
 

@@ -10,36 +10,28 @@ class ControllerIndex extends BaseSiteController
 
     public function after(){}
 
+
+    /**
+     * **********************************************************************************
+     * Page Home
+     * **********************************************************************************
+     */
     public function actionIndex()
     {
 
-        $this->data['title'] = 'Быстрый, простой MVC PHP Framework.';
-        $this->data['content'] = $this->partial("home/index");
-
-        //$jsA = App::createObj('classes/class/jopa/QmJS');
-
-        //var_dump($jsA);
-
-
-
-       //$this->addScript('nicEdit');
-
-       //$this->addScript('nicEdit', 'footer');
-       //$this->addScript(array('nicEdit', 'jquery'), 'footer');
-
-       //var_dump($this->_scripts);
-       // echo "\n\n";
-       //var_dump($this->scripts);
-
-        //$st = 'E:\__SERVER\domains\qm.loc\app\assets\jquery\jquery-2.0.3.min.js';
-        //$regScriptUrl = substr($st, strpos($st, QmConf("baseUrl")) + strlen(QmConf("baseUrl")) + 1 ) ;
-        //$regScriptUrl = URL.'/'.str_replace('\\','/',$regScriptUrl);
-
-        //var_dump($regScriptUrl);
+        $this->data['mainTitle'] = 'Быстрый, простой MVC PHP Framework.';
+        $this->data['mainContent'] = $this->partial("home/index");
 
         $this->show('main');
+
     }
 
+
+    /**
+     * **********************************************************************************
+     * Page Login
+     * **********************************************************************************
+     */
     public function actionLogin()
     {
         if( !empty($_POST['email']) OR !empty($_POST['password']) ){
@@ -54,18 +46,120 @@ class ControllerIndex extends BaseSiteController
                 App::redirect(App::$url.'/index/index');
             }
         }else{
-            $this->data['title'] = 'Login';
-            $this->data['content'] = $this->partial('home/login');
+            $this->data['mainTitle'] = 'Login';
+            $this->data['mainContent'] = $this->partial('home/login');
             $this->show('main');
         }
     }
 
+
+    /**
+     * **********************************************************************************
+     * Page Logout
+     * **********************************************************************************
+     */
     public function actionLogout()
     {
         QmUser::unAuth();
         App::redirect(App::$url.'/index/login');
     }
 
+
+    /**
+     * **********************************************************************************
+     * Page Documentation
+     * **********************************************************************************
+     */
+
+
+    public function actionDoc()
+    {
+        $re = App::$request;
+
+        $this->data['mainTitle'] = 'Documentation Page';
+        $this->data['mainContent'] = 'Controller static text. appDoc/Controllers/ControllerIndex.php
+        :: class ControllerIndex - actionDoc. Url '.$re;
+
+        $this->show('main');
+    }
+
+
+    /**
+     * **********************************************************************************
+     * Page Controllers
+     * **********************************************************************************
+     */
+    public function actionControllers()
+    {
+        $this->setChunk('sidebarFirst','controllers/sidebarGen');
+
+        $model = $this->model("Pages");
+        $dbInfo = $model->getPageByLink('controllers');
+
+        $this->data['mainTitle'] = $dbInfo['title'];
+        $this->data['mainTitle'] = $dbInfo['title'];
+        $this->data['mainContent'] = htmlspecialchars_decode($dbInfo['content']);
+
+        $this->show('main');
+    }
+
+
+    /**
+     * **********************************************************************************
+     * Page Models
+     * **********************************************************************************
+     */
+    public function actionModels()
+    {
+        $this->setChunk('sidebarFirst','chunks/helpMessage');
+
+        $this->data["pageTitle"] = "Qm - Модели";
+
+        $ModelPages = $this->model("Pages");
+        $getCurrent = $ModelPages->getPageByLink('models');
+
+        $this->data['mainTitle'] = $getCurrent['title'];
+        $this->data['mainContent'] = htmlspecialchars_decode($getCurrent['content']);
+
+        $this->show('main');
+    }
+
+
+    /**
+     * **********************************************************************************
+     * Page Views
+     * **********************************************************************************
+     */
+    public function actionViews()
+    {
+        $this->setChunk('sidebarFirst','chunks/helpMessage');
+
+        $this->data["pageTitle"] = "Qm - Представления";
+
+        $ModelPages = $this->model("Pages");
+        $getCurrent = $ModelPages->getPageByLink('views');
+
+        $this->data['mainTitle'] = $getCurrent['title'];
+        $this->data['mainContent'] = htmlspecialchars_decode($getCurrent['content']);
+
+        $this->show('main');
+    }
+
+
+    /**
+     * **********************************************************************************
+     * Page Download
+     * **********************************************************************************
+     */
+    public function actionDownload()
+    {
+        $re = App::$request;
+
+        $this->data['mainTitle'] = 'Download actionIndex';
+        $this->data['mainContent'] = 'Download this. REQUEST: '.$re;
+
+        $this->show('main');
+    }
 
 }
 

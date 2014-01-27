@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
     <head>
-        <title><?php //$this->show("pageTitle"); ?></title>
+        <title><?php $this->data("title"); ?></title>
         <meta charset="utf-8">
 
         <?php //echo $this->showScripts('header','nicEdit'); ?>
