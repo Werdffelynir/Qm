@@ -8,6 +8,10 @@
  */
 
 
+/** Bases system functions */
+include "functions.php";
+
+
 /**
  * Автозагрузка классов преложения и системы
  * Авто загрузка происходит по установленым настройкам конфигурации
@@ -117,9 +121,13 @@ function __autoload($className){
 /** Hard-Core system */
 include "Core/App.php";
 
+/** Run сore */
+$app = new App();
 
 /** Подключение внутрених файлов Преложения */
 if(file_exists(PATH_APP."functions.php"))
     include PATH_APP."functions.php";
 if(file_exists(PATH_APP."bootstrap.php"))
     include PATH_APP."bootstrap.php";
+
+$app->run();
