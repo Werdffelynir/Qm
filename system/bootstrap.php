@@ -1,133 +1,67 @@
 <?php
-/**
- * MVC PHP Framework Quick Minimalism
- * File:    bootstrap.php
- * Version: 0.2.2.022
- * Author:  OL Werdffelynir
- * Date:    07.12.13
- */
 
-
-/** Bases system functions */
-include "functions.php";
-
-
-/**
- * Автозагрузка классов преложения и системы
- * Авто загрузка происходит по установленым настройкам конфигурации
- *
- * SysHelpers
- * SysClasses
- * SysController
- * SysModel
- * AppHelpers
- * AppClasses
- * AppControllers (start controllers)
- *
- * И расширений:
- * SysExtensions
- * AppExtensions
- *
- * @param $className
- */
-function __autoload($className){
-
-    $configAutoload = QmConf('all', array('load','sys'));
-
-// SysHelpers
-    if($configAutoload["helpersSysAutoload"]["autoload"] == true){
-        include(PATH_SYS_HELPERS.$className.'.php');
-    }elseif(!empty($configAutoload["helpersSysAutoload"]["classes"])){
-        foreach($configAutoload["helpersSysAutoload"]["classes"] as $loadClasses){
-            if($className == $loadClasses){
-                include(PATH_SYS_HELPERS.$loadClasses.'.php');
-            }
-        }
-    }
-
-// SysClasses
-    if($configAutoload["classesSysAutoload"]["autoload"] == true){
-        include(PATH_SYS_CLASSES.$className.'.php');
-    }elseif(!empty($configAutoload["classesSysAutoload"]["classes"])){
-        foreach($configAutoload["classesSysAutoload"]["classes"] as $loadClasses){
-            if($className == $loadClasses){
-                include(PATH_SYS_CLASSES.$loadClasses.'.php');
-            }
-        }
-    }
-
-// SysController
-    if (file_exists(PATH_SYS_CONTROLLER.$className.'.php')){
-        include (PATH_SYS_CONTROLLER.$className.'.php');
-    }
-
-// SysModel
-    if (file_exists(PATH_SYS_MODEL.$className.'.php')){
-        include (PATH_SYS_MODEL.$className.'.php');
-    }
-
-// AppHelpers
-    if($configAutoload["helpersAutoload"]["autoload"] == true){
-        include(PATH_APP_HELPERS.$className.'.php');
-    }elseif(!empty($configAutoload["helpersAutoload"]["classes"])){
-        foreach($configAutoload["helpersAutoload"]["classes"] as $loadClasses){
-            if($className == $loadClasses){
-                include(PATH_APP_HELPERS.$loadClasses.'.php');
-            }
-        }
-    }
-
-// AppClasses
-    if($configAutoload["classesAutoload"]["autoload"] == true){
-        include(PATH_APP_CLASSES.$className.'.php');
-    }elseif(!empty($configAutoload["classesAutoload"]["classes"])){
-        foreach($configAutoload["classesAutoload"]["classes"] as $loadClasses){
-            if($className == $loadClasses){
-                include(PATH_APP_CLASSES.$loadClasses.'.php');
-            }
-        }
-    }
-
-// AppControllers (start controllers)
-    if( !empty($configAutoload["startControllerAutoload"]) ) {
-        foreach($configAutoload["startControllerAutoload"] as $loadClasses){
-            if($className == $loadClasses){
-                include(PATH_APP_CONTROLLERS.$loadClasses.'.php');
-            }
-        }
-    }
-
-// SysExtensions
-    if( !empty($configAutoload["extensionSysAutoload"]["classes"]) ){
-        foreach($configAutoload["extensionSysAutoload"]["classes"] as $keyExt => $valExt ){
-            if(file_exists(PATH_SYS_EXTENSION.$keyExt.DS.$valExt)){
-                include PATH_SYS_EXTENSION.$keyExt.DS.$valExt;
-            }
-        }
-    }
-
-// AppExtensions
-    if( !empty($configAutoload["extensionAutoload"]["classes"]) ){
-        foreach($configAutoload["extensionAutoload"]["classes"] as $keyExt => $valExt ){
-            if(file_exists(PATH_APP_EXTENSION.$keyExt.DS.$valExt)){
-                include PATH_APP_EXTENSION.$keyExt.DS.$valExt;
-            }
-        }
-    }
-
+if(DEBUG){
+    error_reporting(E_ALL | E_STRICT);
+    ini_set('display_errors', 1);
+} else {
+    error_reporting(0);
+    ini_set('display_errors', 0);
 }
 
 
-/** Hard-Core system */
-include "Core/App.php";
+// Check PHP version
+if (version_compare(phpversion(), '5.4.3', '<')) {
+    //printf("PHP 5.4.3 is required, you have %s\n", phpversion());
+    //exit();
+}
 
-/** Run сore */
-$app = new App();
+// The page cannot be displayed in a frame
+header('X-Frame-Options: SAMEORIGIN');
 
-/** Подключение внутрених файлов Преложения */
-if(file_exists(PATH_APP."functions.php"))
-    include PATH_APP."functions.php";
-if(file_exists(PATH_APP."bootstrap.php"))
-    include PATH_APP."bootstrap.php";
+// Hide php version
+header('X-Powered-By: backend');
 
-$app->run();
+/** 
+ * Include helper base function file.
+ */
+if(file_exists(PATH_SYS.'functions.php'))
+	include( PATH_SYS.'functions.php' );
+
+
+
+timerStart();
+
+
+/** **************************************************************************************************
+    Autoload aplication classes
+************************************************************************************************** **/
+function __autoload($className)
+{
+
+//var_dump('add:'.$className);echo '<br>';
+
+// System  autolads classes files
+    if( strpos($className,'Core\\') >    -1 OR
+        strpos($className,'Library\\') > -1 ){
+        $className = str_replace('\\','/',$className);
+        //var_dump( 'intoSYS'.$className );echo '<br>';
+        //var_dump( PATH_SYS . $className . '.php' );echo '<br>';
+
+        include(PATH_SYS . $className . '.php');
+    }
+
+// App autolads classes files
+    if( strpos($className,'Classes\\')     > -1 OR 
+        strpos($className,'Models\\')      > -1 OR
+        strpos($className,'Helpers\\')     > -1 OR
+        strpos($className,'Components\\')  > -1 OR
+        strpos($className,'Controllers\\') > -1 OR
+        strpos($className,'Extensions\\')  > -1 ){
+        $className = str_replace('\\','/',$className);
+        //var_dump( 'intoAPP'.$className );echo '<br>';
+        //var_dump( PATH_APP . $className . '.php' );echo '<br>';
+        
+        include(PATH_APP . $className . '.php');
+    }
+    
+}

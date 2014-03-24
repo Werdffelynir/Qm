@@ -1,494 +1,782 @@
 <?php
-/*
- * MVC PHP Framework Quick Minimalism
- * File:    functions.php
- * Version: 0.2.0
- * Author:  OL Werdffelynir
- * Date:    07.12.13
 
-   *****************************************************************************************
-
-                                         SYSTEM CONST
-
-   ************************************************************************************** */
-
-/** Сепаратор, кратко */
-define('DS', DIRECTORY_SEPARATOR);
-
-/** Системная константа, для проверки пренадлежности */
-define('QM', 'QmSYSTEM');
-
-/** Системные пути */
-define('ROOT', dirname(__DIR__));
-define('PATH', ROOT.DS);
-
-define('PATH_SYS', PATH.'system'.DS);
-define('PATH_SYS_CLASSES', PATH_SYS.'Classes'.DS);
-define('PATH_SYS_CONTROLLER', PATH_SYS.'Controller'.DS);
-define('PATH_SYS_CORE', PATH_SYS.'Core'.DS);
-define('PATH_SYS_EXTENSION',  PATH_SYS.'Extension'.DS);
-define('PATH_SYS_HELPERS', PATH_SYS.'Helpers'.DS);
-define('PATH_SYS_MODEL', PATH_SYS.'Model'.DS);
-
-define('PATH_APP', PATH. QmConfSys('nameApp').DS);
-define('PATH_APP_CLASSES', PATH_APP.'Classes'.DS);
-define('PATH_APP_CONTROLLERS', PATH_APP.'Controllers'.DS);
-define('PATH_APP_EXTENSION', PATH_APP.'Extension'.DS);
-define('PATH_APP_HELPERS', PATH_APP.'Helpers'.DS);
-define('PATH_APP_MODELS', PATH_APP.'Models'.DS);
-define('PATH_APP_STRUCTURE', PATH_APP.'Structure'.DS);
-define('PATH_APP_VIEWSTHEME', PATH_APP.'ViewsTheme'.DS);
-define('PATH_APP_VIEWSPARTIALS', PATH_APP.'ViewsPartials'.DS);
-define('PATH_APP_THEME', PATH_APP_VIEWSTHEME.QmConfApp('nameTheme').DS);
-
-
-/** Загрузка базовых свойст конфигурации, если разрабатываеться сложное преложение то для улучшения производимости
- * можно установить необходимые свойста как в массив, получим глобальный доступ
-$QmBaseConf = QmConf(
-    array(
-        'nameApp',
-        'nameTheme',
-        'baseUrl',
-    ),
-    array(
-        'app',
-        'sys',
-    ));
-*/
-
-
-/* *****************************************************************************************
-
-                            INCLUDES FILES & DIRECTORIES FUNCTIONS 
-
-   ************************************************************************************** */
 /**
+ * Счетчик
  *
+ * @since 0.3.0
  *
- * @param $file
- * @param array $data
- * @param bool $e
- * @return bool
+ * timerStart();
+ * echo timerStart();
  */
-function QmIncludeTheme($file, array $data=null, $e=false){
+if (!function_exists('timerStart')) {
+    function timerStart()
+    {
+        define('START_TIME',microtime(true));
+    }
+}
+if (!function_exists('timerStop')) {
+    function timerStop()
+    {
+        return round(microtime(true)-START_TIME,4);
+    }
+}
 
-    if(file_exists($fileName = PATH_APP_THEME.$file.'.php')){
 
-        if(!is_null($data))
-            extract($data);
+/**
+ * Get configuration settings
+ *
+ * @since 0.3.0
+ */
+if (!function_exists('config')) {
 
-        if($e)
-            echo $fileName;
-        else
-            include $fileName;
+    /**
+     * @param null $p
+     * @return mixed
+     */
+    function config($p=null)
+    {
+        static $config;
         
-    }else{
-        return false;
+        if (empty($config)) {
+            $file = PATH_APP . 'config.php';
+            $config = include $file;
+            if($p==null) 
+                return $config;
+            else
+                if(isset($config[$p]))
+                    return $config[$p];
+                else
+                    die('Error! param ['.$p.'] not exists!');
+        }else{
+            if($p==null) 
+                return $config;
+            else 
+                if(isset($config[$p]))
+                    return $config[$p];
+                else
+                    die('Error! param ['.$p.'] not exists!');
+        }
     }
 }
 
 
-
 /**
- * @param $className
- * @param bool $newObj
- * @return bool|string
+ * Quick echo text with data
+ *
+ * @since 0.3.0
+ *
+ * e('<p>test string variable: $key </p>',array('key'=>'TOOLS'));
  */
-function QmIncludeClass($className, $newObj=false){
-    if(file_exists(PATH_APP_CLASSES.$className.'.php')){
-        include PATH_APP_CLASSES.$className.'.php';
-        if( $newObj )
-        return new $className.'()';
-    }else{
-        return false;
+if (!function_exists('strRun')) {
+
+    /**
+     * @param   string  $value
+     * @param   null    $data
+     * @param   bool    $e
+     * @return  mixed
+     */
+    function strRun($value, $data=null, $e=true)
+    {
+        if(!empty($data)){
+            extract($data);
+            @eval("\$value = \"$value\";");
+        }
+        if ($e)
+            echo $value;
+        else
+            return $value;
     }
 }
 
 
 /**
- * @param $helperName
- * @param bool $newObj
- * @return bool|string
+ * Перевод строки в нижний регистр
+ *
+ * @since 0.3.0
+ *
+ * @param   string  $text
+ * @return  string
  */
-function QmIncludeHelper($helperName, $newObj=false){
-    if(file_exists(PATH_APP_HELPERS.$helperName.'.php')){
-        include PATH_APP_HELPERS.$helperName.'.php';
-        if( $newObj )
-        return new $helperName.'()';
-    }else{
-        return false;
+function toLower($text) {
+    if (function_exists('mb_strtolower')) {
+        $text = mb_strtolower($text, 'UTF-8');
+    } else {
+        $text = strtolower($text);
     }
+    return $text;
 }
 
 
-
 /**
- * @param $extensionName
- * @param bool $newObj
- * @return bool|string
+ * Перевод строки в верхний регистр
+ *
+ * @since 0.3.0
+ *
+ * @param   string  $text
+ * @return  string
  */
-function QmIncludeExt($extensionName, $newObj=false){
-    if(file_exists(PATH_APP_EXTENSION.$extensionName.'.php')){
-        include PATH_APP_EXTENSION.$extensionName.'.php';
-        if( $newObj )
-        return new $extensionName.'()';
-    }else{
-        return false;
+function toUpper($text) {
+    if (function_exists('mb_strtoupper')) {
+        $text = mb_strtoupper($text, 'UTF-8');
+    } else {
+        $text = strtoupper($text);
     }
+    return $text;
 }
 
 
 
+/* SECURITY FUNCTIONS
+ **********************************************************************  */
+
 /**
- * @param $fileName
+ * Очистка строки
+ *
+ * @since 0.3.0
+ *
+ * @param string    $data
+ * @param bool      $max
  * @return string
  */
-function QmIncludeOb($fileName){
-    if(file_exists($fileName)){
-        ob_start();
-        include $fileName;
-        $fileCont = ob_get_contents();
-        ob_clean();
-        return $fileCont;
+function clean($data,$max=true){
+    if($max)
+        $data = trim(stripslashes(strip_tags(html_entity_decode($data, ENT_QUOTES, 'UTF-8'))));
+    else
+        $data = trim(stripslashes(strip_tags($data, ENT_QUOTES, 'UTF-8')));
+
+    return $data;
+}
+
+
+/**
+ * Очистка URL строки
+ *
+ * @since 0.3.0
+ *
+ * @param   string  $text
+ * @return  string
+ */
+function cleanUrl($text)  {
+    $text = strip_tags(toLower($text));
+    $codeEntitiesMatch = array(' ?',' ','--','&quot;','!','@','#','$','%','^','&','*','(',')','+','{','}','|',':','"','<','>','?','[',']','\\',';',"'",',','/','*','+','~','`','=','.');
+    $codeEntitiesReplace = array('','-','-','','','','','','','','','','','','','','','','','','','','','','','','');
+    $text = str_replace($codeEntitiesMatch, $codeEntitiesReplace, $text);
+    $text = urlencode($text);
+    $text = str_replace('--','-',$text);
+    $text = rtrim($text, "-");
+    return $text;
+}
+
+
+/**
+ * Очистка от тегов и кавычек по умолчанию,
+ * или если указан второй аргумент кодирует кавычки
+ *
+ * @since 0.3.0
+ *
+ * @param string $text
+ * @param bool $encode
+ * @return string
+ */
+function clearQuotes($text, $encode=false)  {
+    $text = strip_tags($text);
+    if(!$encode){
+        $codeEntitiesMatch = array('"','\'','&quot;');
+        $text = str_replace($codeEntitiesMatch, '', $text);
     }else{
+        $text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8', false);
+    }
+    return trim($text);
+}
+
+
+
+/**
+ * Очищает строку от небезопасных сиволов, обезопасит от XSS атак
+ *
+ * @since 0.3.0
+ * @author Martijn van der Ven
+ *
+ * @param   string  $str    Строка для очистки
+ * @return  string
+ */
+function clearXSS($str){
+    // attributes blacklist:
+    $attr = array('style','on[a-z]+');
+    // elements blacklist:
+    $elem = array('script','iframe','embed','object');
+    // extermination:
+    $str = preg_replace('#<!--.*?-->?#', '', $str);
+    $str = preg_replace('#<!--#', '', $str);
+    $str = preg_replace('#(<[a-z]+(\s+[a-z][a-z\-]+\s*=\s*(\'[^\']*\'|"[^"]*"|[^\'">][^\s>]*))*)\s+href\s*=\s*(\'javascript:[^\']*\'|"javascript:[^"]*"|javascript:[^\s>]*)((\s+[a-z][a-z\-]*\s*=\s*(\'[^\']*\'|"[^"]*"|[^\'">][^\s>]*))*\s*>)#is', '$1$5', $str);
+    foreach($attr as $a) {
+        $regex = '(<[a-z]+(\s+[a-z][a-z\-]+\s*=\s*(\'[^\']*\'|"[^"]*"|[^\'">][^\s>]*))*)\s+'.$a.'\s*=\s*(\'[^\']*\'|"[^"]*"|[^\'">][^\s>]*)((\s+[a-z][a-z\-]*\s*=\s*(\'[^\']*\'|"[^"]*"|[^\'">][^\s>]*))*\s*>)';
+        $str = preg_replace('#'.$regex.'#is', '$1$5', $str);
+    }
+    foreach($elem as $e) {
+        $regex = '<'.$e.'(\s+[a-z][a-z\-]*\s*=\s*(\'[^\']*\'|"[^"]*"|[^\'">][^\s>]*))*\s*>.*?<\/'.$e.'\s*>';
+        $str = preg_replace('#'.$regex.'#is', '', $str);
+    }
+    return $str;
+}
+
+
+/**
+ * Html в спец-символы
+ *
+ * @since 0.3.0
+ *
+ * @param   string  $text
+ * @return  string
+ */
+function htmlEncode($text) {
+    $text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+    $text = str_replace(chr(12), '', $text); // FF
+    $text = str_replace(chr(3), ' ', $text); // ETX
+    return $text;
+}
+
+
+/**
+ * Спец-символы HTML Decode
+ *
+ * @since 0.3.0
+ *
+ * @param   string  $text
+ * @return  string
+ */
+function htmlDecode($text) {
+    $text = stripslashes(htmlspecialchars_decode($text, ENT_QUOTES));
+    return $text;
+}
+
+
+/**
+ * Осуществляет фильтрацию переменной, возвращается к htmlentities
+ * использует стандартную функ filter_var.
+ *
+ * @since 0.3.0
+ *
+ * @param  string $var    Строка фильтрации
+ * @param  string $filter Тип фильтра (string|int|float|url|email|special или decode)
+ * @return string
+ */
+function specFilter($var,$filter = "special"){
+
+    if($filter=="decode")
+        return stripslashes(htmlspecialchars_decode($var, ENT_QUOTES));
+
+    if(function_exists( "filter_var") ){
+        $aryFilter = array(
+            "string"  => FILTER_SANITIZE_STRING,
+            "int"     => FILTER_SANITIZE_NUMBER_INT,
+            "float"   => FILTER_SANITIZE_NUMBER_FLOAT,
+            "url"     => FILTER_SANITIZE_URL,
+            "email"   => FILTER_SANITIZE_EMAIL,
+            "special" => FILTER_SANITIZE_SPECIAL_CHARS,
+        );
+        if(isset($aryFilter[$filter])) return filter_var( $var, $aryFilter[$filter]);
+        return filter_var( $var, FILTER_SANITIZE_SPECIAL_CHARS);
+    }
+    else {
+        return htmlentities($var);
+    }
+}
+
+
+
+/* STRING AND ARRAY FUNCTIONS
+ **********************************************************************  */
+
+
+
+/**
+ * Сортировка вложеных массивов массива
+ * Сортирует вложеные вложеные массивы по ключю одного с волженых массивов
+ *
+ * @since 0.3.0
+ *
+ * @param array     $array
+ * @param string    $subKey     Ключ вложеного массива, по котором будет сортировка
+ * @param string    $order      order 'asc' или 'desc'
+ * @param bool      $natural    использувать алгоритм сортировки "natural order"
+ * @return array
+ */
+function sortBySubKey($array,$subKey,$order='asc',$natural=true){
+
+    if (count($array) != 0 || (!empty($array))) {
+        $result = array();
+        foreach($array as $k=>$v) {
+            if(isset($v[$subKey])) $temp[$k] = toLower($v[$subKey]);
+        }
+
+        if(!isset($temp)) return $array;
+
+        if($natural){
+            natsort($temp);
+            if($order=='desc') $temp = array_reverse($temp,true);
+        }
+        else {
+            ($order=='asc')? asort($temp) : arsort($temp);
+        }
+
+        foreach($temp as $key=>$val) {
+            $result[] = $array[$key];
+        }
+
+        return $result;
+    }
+}
+function sortBySubVal($array,$subKey, $order='asc',$natural = true) {}
+
+
+
+
+/* DIRS AND FILES FUNCTIONS
+ **********************************************************************  */
+
+/**
+ * Конвертирует число или строку в байты
+ *
+ * @since 0.3.0
+ *
+ * @param   $bytes
+ * @param   int $precision
+ * @return  string
+ */
+function toBytes($bytes, $precision = 2)
+{
+    $kilobyte = 1024;
+    $megabyte = $kilobyte * 1024;
+    $gigabyte = $megabyte * 1024;
+    $terabyte = $gigabyte * 1024;
+
+    if (($bytes >= 0) && ($bytes < $kilobyte)) {
+        return $bytes . ' B';
+
+    } elseif (($bytes >= $kilobyte) && ($bytes < $megabyte)) {
+        return round($bytes / $kilobyte, $precision) . ' KB';
+
+    } elseif (($bytes >= $megabyte) && ($bytes < $gigabyte)) {
+        return round($bytes / $megabyte, $precision) . ' MB';
+
+    } elseif (($bytes >= $gigabyte) && ($bytes < $terabyte)) {
+        return round($bytes / $gigabyte, $precision) . ' GB';
+
+    } elseif ($bytes >= $terabyte) {
+        return round($bytes / $terabyte, $precision) . ' TB';
+    } else {
+        return $bytes . ' B';
+    }
+}
+
+
+
+
+
+/**
+ * Сканирует указаную директорию $path на выявление указаных $type (файлов или директрорий) по умолчанию ито и другое
+ *
+ * @since 0.3.0
+ *
+ * @param string    $path   путь
+ * @param bool      $type   false - все, 'd'||'dir' - каталоги, 'f'||'file' - файлы
+ * @return array
+ */
+function openFiles($path, $type=false) {
+
+    $handle = opendir($path) or die("getFiles: Unable to open $path");
+    $fileArr = array();
+    while ($file = readdir($handle)) {
+        if ($file != '.' && $file != '..' ) {
+
+            if($type==false){
+                $fileArr[] = $file;
+            } elseif( ($type=='d' || $type=='dir') && is_dir($path.DIRECTORY_SEPARATOR.$file) ) {
+                $fileArr[] = $file;
+                break;
+            } elseif( ($type=='f' || $type=='file') && is_file($path.DIRECTORY_SEPARATOR.$file) ) {
+                $fileArr[] = $file;
+                break;
+            }
+        }
+    }
+    closedir($handle);
+    return $fileArr;
+}
+
+
+
+/**
+ * Возвращает с указаной директрии массив полных путей всех каталогов и файлов
+ *
+ * @since 0.3.0
+ *
+ * @param   string      $directory  путь для сканирования
+ * @param   boolean     $recursive  усли true сканирование рекурсивное
+ * @return  array
+ */
+function directoryToArray($directory, $recursive) {
+
+    $directory = rtrim($directory, DIRECTORY_SEPARATOR);
+
+    $array_items = array();
+    if ($handle = opendir($directory)) {
+        while (false !== ($file = readdir($handle))) {
+            if ($file != "." && $file != "..") {
+                if (is_dir($directory. "/" . $file)) {
+                    if($recursive) {
+                        $array_items = array_merge($array_items, directoryToArray($directory. "/" . $file, $recursive));
+                    }
+                    $file = $directory . "/" . $file;
+                    $array_items[] = preg_replace("/\/\//si", "/", $file);
+                } else {
+                    $file = $directory . "/" . $file;
+                    $array_items[] = preg_replace("/\/\//si", "/", $file);
+                }
+            }
+        }
+        closedir($handle);
+    }
+    return $array_items;
+}
+
+
+
+
+/* ПРОВЕРОЧНЫЕ FUNCTIONS
+ **********************************************************************  */
+
+
+/**
+ * Alias for checking for debug constant
+ * @since 3.2.1
+ * @return  bool true if debug enabled
+ */
+function isDebug(){
+    return config('debug');
+}
+
+
+/**
+ * Check if request is an ajax request
+ * @since  3.3.0
+ * @return bool true if ajax
+ */
+function isAjax(){
+    return (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') || isset($_GET['ajax']);
+}
+
+
+
+/**
+ * Check if server is Apache
+ *
+ * @returns bool
+ */
+function isApache() {
+    return( strpos(strtolower($_SERVER['SERVER_SOFTWARE']),'apache') !== false );
+}
+
+
+/**
+ * Проверяет являеться ли каталог пустым
+ *
+ * @since 0.3.0
+ *
+ * @param   string $folder
+ * @return  bool
+ */
+function isEmptyFolder($folder) {
+    $files = array ();
+    if ( $handle = opendir ( $folder ) ) {
+        while ( false !== ( $file = readdir ( $handle ) ) ) {
+            if ( $file != "." && $file != ".." ) {
+                $files [] = $file;
+            }
+        }
+        closedir ( $handle );
+    }
+    return ( count ( $files ) > 0 ) ? FALSE : TRUE;
+}
+
+
+
+/* COOKIE FUNCTIONS
+ **********************************************************************  */
+
+
+/**
+ * Генератор соли
+ *
+ * @since 0.3.0
+ *
+ * @param $name
+ * @param $value
+ * @return string
+ */
+function cookieSalt($name, $value){
+
+    $salt = (config('salt'))?config('salt'):false;
+
+    if (!$salt)
+        \Core\App::ExceptionError('A valid cookie salt is required. Please set "salt" in your config.php. For more information check the documentation');
+
+    $agent = isset($_SERVER['HTTP_USER_AGENT']) ? strtolower($_SERVER['HTTP_USER_AGENT']) : 'unknown';
+
+    return sha1($agent.$name.$value.$salt);
+}
+
+
+/**
+ * Установитель
+ *
+ * @since 0.3.0
+ *
+ * @param   $name
+ * @param   null    $value
+ * @param   int     $expire
+ * @param   array   $param      Установить дополнительные параметры array('expire'=>'','path'=>'','domain'=>'');
+ * @return  bool
+ */
+function addCookie($name, $value=null, $expire=600, array $param=array()) {
+
+    if(empty($param)){
+        $path = \Core\App::$getURL['nude'].'/';
+        $domain = $_SERVER['HTTP_HOST'];
+    }else{
+        $path = $param['path'];
+        $domain = $param['domain'];
+    }
+
+    $encodeCookie = \Core\App::$config['encodeCookie'];
+    $expire = $expire+time();
+
+    if($encodeCookie)
+        $value = cookieSalt($name, $value).'~'.$value;
+
+    return setcookie($name, $value, $expire, $path, $domain);
+}
+
+
+/**
+ * Доставатель cookie по имени,
+ * вторым параметром значение по умолчани,
+ * третим параметром установить удаление после выборки
+ *
+ * @since 0.3.0
+ *
+ * @param   $key
+ * @param   null    $default
+ * @param   bool    $delete
+ * @return null
+ */
+function getCookie($key, $default = NULL, $delete = false){
+
+    if (!isset($_COOKIE[$key]))
+        return $default;
+
+    $cookie = $_COOKIE[$key];
+
+    $split = strlen(cookieSalt($key, NULL));
+
+    if (isset($cookie[$split]) AND $cookie[$split] === '~') {
+        list ($hash, $value) = explode('~', $cookie, 2);
+
+        if (cookieSalt($key, $value) === $hash)
+            return $value;
+
+        if ($delete)
+            deleteCookie($key);
+    }
+
+    return $default;
+}
+
+
+/**
+ * Удалятель cookie
+ *
+ * @since 0.3.0
+ *
+ * @param   $name
+ * @param   array   $param  Дополнительные параметры array('expire'=>'','path'=>'','domain'=>'');
+ * @return  bool
+ */
+function deleteCookie($name, array $param=array()){
+    if(empty($param)){
+        $path = \Core\App::$getURL['nude'].'/';
+        $domain = $_SERVER['HTTP_HOST'];
+    } else {
+        $path = $param['path'];
+        $domain = $param['domain'];
+    }
+    unset($_COOKIE[$name]);
+    return setcookie($name, NULL, -86400, $path, $domain);
+}
+
+
+/* i18n языковые FUNCTIONS
+ **********************************************************************  */
+
+
+/**
+ *
+ * @since 0.3.0
+ *
+ * @param $name
+ * @param bool $echo
+ * @return null|string
+ */
+function lang($name, $echo=true) {
+
+    static $langData = array();
+    $lang = \Core\App::$langCode;
+
+    if(!isset($lang))
+        return null;
+
+    if(empty($langData)){
+        $data = include PATH_APP.'Languages/'.$lang.'.php';
+        $langData = $data['words'];
+    }
+
+    if (array_key_exists($name, $langData)) {
+        $myVar = $langData[$name];
+    } else {
+        if (array_key_exists($name, $langData)) {
+            $myVar = $langData[$name];
+        } else {
+            $myVar = '{'.$name.'}';
+        }
+    }
+
+    if (!$echo) {
+        return $myVar;
+    } else {
+        echo $myVar;
+    }
+}
+
+
+
+
+
+
+/* OTHER FUNCTIONS
+ **********************************************************************  */
+
+
+/**
+ * Redirect URL. Первый аргумент URL относительны по приложению, если необходимо
+ * редирект сделать на другой домен или приложение необходимо указывать полную строку
+ * например "http://other=site.com/index/hello"
+ * Второй аргумент если numeric - время задержки, или bool true для force режима
+ * Третий параметр если режим не force код заголовка страницы после переадрисации
+ *
+ * @since 0.3.0
+ *
+ * @param string    $url        Переадресация на URL
+ * @param int|bool  $delayForce Редирек с задержкой с секунднах. Или если true - принудительно.
+ * @param int       $code       HTTP код заголовка; по умолчанию 302
+ * @return bool
+ */
+function redirect($url, $delayForce = 0, $code = 302)
+{
+    if(isAjax()){
+        header('HTTP/1.1 401 Unauthorized', true, 401);
+        header('WWW-Authenticate: FormBased');
+        die();
+    }
+
+    if( !(strpos($url,'http://') > -1) )
+        $url = \Core\App::$getURL['base'].'/'.$url;
+
+    if($delayForce===true){
+        if (!headers_sent()) {
+            header('Location: ' . $url);
+        } else {
+            echo "<html><head><title>REDIRECT</title></head><body>";
+            echo '<script type="text/javascript">';
+            echo 'window.location.href="' . $url . '";';
+            echo '</script>';
+            echo '<noscript>';
+            echo '<meta http-equiv="refresh" content="0; url=' . $url . '" />';
+            echo '</noscript>';
+            echo "</body></html>";
+        }
+        echo "<!--Headers already!\n-->";
+        echo "</body></html>";
+        exit;
+    }
+
+    if (!headers_sent($file, $line)) {
+        if ($delayForce)
+            header('Refresh: ' . $delayForce . '; url=' . $url, true);
+        else
+            header('Location: ' . $url, true, $code);
+        exit();
+    } else {
+        if (isDebug())
+            \Core\App::ExceptionError('Headers sent. Redirect impossible!', '<span style="color:red">File: <b>'.$file.'</b><br>Line: <b>'.$line.'</b><span>');
+        else
+            return true;
+    }
+
+    exit;
+}
+
+
+
+/**
+ * Простая отправка email
+ * Отправитель администратор по умолчанию, указан в конфигурационных настройках приложения
+ *
+ * @since 0.3.0
+ *
+ * @param  string    $to
+ * @param  string    $subject
+ * @param  string    $message
+ * @param  bool      $fromEmail
+ * @return string
+ */
+function sendMail($to, $subject, $message, $fromEmail=false) {
+
+    if(!$fromEmail)
+        if (config('email'))
+            $fromEmail = config('email');
+        else
+            $fromEmail =  'noreply@'.$_SERVER['SERVER_NAME'];
+
+    $headers  ='"MIME-Version: 1.0' . PHP_EOL;
+    $headers .= 'Content-Type: text/html; charset=UTF-8' . PHP_EOL;
+    $headers .= 'From: '.$fromEmail . PHP_EOL;
+    $headers .= 'Reply-To: '.$fromEmail . PHP_EOL;
+    $headers .= 'Return-Path: '.$fromEmail . PHP_EOL;
+
+    if( @mail($to,'=?UTF-8?B?'.base64_encode($subject).'?=',"$message",$headers) ) {
+        return true;
+    } else {
         return false;
     }
 }
 
 
-
-
-/* *****************************************************************************************
-
-                                    GET CONFIGURATION FUNCTIONS 
-
-   ************************************************************************************** */
-
-
-/*
- * Функция доступа к данным конфигурационного файла.
- * Функция сначала подгружает конфигурационные файлы и сливает, их приоритет у
- * файлов преложения выше чем у файлов системных.
- *
- * Функция употребляет некоторое количество ресурсов, в примерах показано по
- * возрастающей, последний прием QmConf('__имя_сайства__') самый ресурср вотребляем.
- *
- * //__имя_сайства__     указано в конфиг файле типа "__тип__"
- * //__тип__             может быть "APP" или "SYS" или "LOAD" по умолчанию "all"
-
- * Пример использования, атребуты string - string:
-    QmConf('__имя_сайства__',   '__тип__');
-
- * Пример использования, атребуты array - string:
-    QmConf(
-        array(
-            '__имя_сайства__',
-            '__имя_сайства__'
-            ),
-        '__тип__'
-    );
-
- * Пример использования, атребуты array - array:
-    QmConf(
-        array(
-            '__имя_сайства__',
-            '__имя_сайства__'
-        ),
-        array(
-            '__тип__',
-            '__тип__'
-        )
-    );
-
- * Пример использования, атребут один string:
-    QmConf('__имя_сайства__');
-
- *
- *
- * @param null $param
- * @param string $part
- * @return array|bool|mixed
- */
-
-function QmConf($param = 'all', $part = 'all')
-{
-    static $confApp;
-    static $confLoad;
-    static $confSys;
-
-    $file_app_app  = PATH_APP.'configApplication.php';
-    $file_app_load = PATH_APP.'configAutoload.php';
-    $file_sys_sys  = PATH_SYS.'configSystem.php';
-
-    if(empty($confApp) /*AND file_exists($file_app_app)*/){
-        //$confApp = include PATH_APP.'configApplication.php';
-        $confApp = include $file_app_app;
-    }
-    if(empty($confLoad) /*AND file_exists($file_app_load)*/){
-        //$confLoad = include PATH_APP.'configAutoload.php';
-        $confLoad = include $file_app_load;
-    }
-    if(empty($confSys) /*AND file_exists($file_sys_sys)*/){
-        //$confSys = include PATH_SYS.'configSystem.php';
-        $confSys = include $file_sys_sys;
-    }
-
-	if( is_array($part) )
-	{
-		$config = array();
-		$_config = array();
-		foreach( $part as $keyPart )
-		{
-            $keyPart = strtolower($keyPart);
-			if($keyPart=='sys' AND file_exists($file_sys_sys)){
-				$_config = $confSys;
-			}elseif($keyPart=='app' AND file_exists($file_app_app)){
-                $_config = $confApp;
-			}elseif($keyPart=='load' AND file_exists($file_app_load)){
-                $_config = $confLoad;
-			}
-            $config = array_merge($config, $_config);
-		}
-
-		if( $param == 'all' ){
-        	return $config;
-        }elseif( is_array($param) ){
-            $_config = array();
-            foreach( $param as $keyParam ){
-            	if(array_key_exists($keyParam, $config)){
-	            	$_config[$keyParam] = $config[$keyParam];
-	            }
-            }
-            return $_config;
-        }elseif( is_string($param) AND array_key_exists($param, $config) ){ 
-        	return $config[$param];
-        }else{
-        	return false; 
-        }
-		
-	}
-	elseif( is_string($part) )
-	{
-		$part = strtolower($part);
-		if($part=='sys' AND file_exists($file_sys_sys)){
-			$config = $confSys;
-		}elseif($part=='app' AND file_exists($file_app_app)){
-            $config = $confApp;
-		}elseif($part=='load' AND file_exists($file_app_load)){
-            $config = $confLoad;
-		}elseif($part=='all'){
-            $confAA = $confApp;
-            $confAL = $confLoad;
-            $confSS = $confSys;
-            $config = array_merge($confAA, $confAL, $confSS);
-		}
-		
-		if( $param == "all" ){
-        	return $config;
-        }elseif( is_array($param) ){
-            $_config = array();
-            foreach( $param as $keyParam ){
-            	if(array_key_exists($keyParam, $config)){
-	            	$_config[$keyParam] = $config[$keyParam];
-	            }
-            }
-            return $_config;
-        }elseif( is_string($param) AND array_key_exists($param, $config) ){ 
-        	return $config[$param];
-        }else{
-        	return false; 
-        }
-	}
-}
-
-
-/*
- * Облегченная функция доступу к данным конфигурационного файла 'configApplication.php',
- * немного быстрее чем QmConf()
-
- * Пример использования, атребут один string:
-    QmConfApp('__имя_сайства__');
- *
- * @param $param
- * @return bool
- */
-function QmConfApp($param)
-{
-    static $confApp;
-    
-    if( file_exists(PATH_APP.'configApplication.php') )
-    {
-        if(empty($confApp)){
-            $confApp = include PATH_APP.'configApplication.php';
-        }
-        $config = $confApp;
-	    
-	    if( array_key_exists($param, $config) ){ 
-	    	return $config[$param];
-	    }else{
-	    	return false; 
-	    }
-    }
-}
-
-/*
- * Облегченная функция доступу к данным конфигурационного файла 'configAutoload.php',
- * немного быстрее чем QmConf()
-
- * Пример использования, атребут один string:
-    QmConfLoad('__имя_сайства__');
-
- * @param $param
- * @return bool
- */
-function QmConfLoad($param)
-{
-    static $confLoad;
-    
-    if(file_exists(PATH_APP.'configAutoload.php') )
-    {
-        if(empty($confLoad)){
-            $confLoad = include PATH_APP.'configAutoload.php';
-        }
-        $config = $confLoad;
-	    
-	    if( array_key_exists($param, $config) ){ 
-	    	return $config[$param];
-	    }else{
-	    	return false; 
-	    }
-    }
-    
-}
-
 /**
- * Облегченная функция доступу к данным конфигурационного файла 'configSystem.php',
- * немного быстрее чем QmConf()
+ * Возвращает текущий URL адрес страницы
 
- * Пример использования, атребут один string:
-    QmConfSys('__имя_сайства__');
-
- * @param $param
- * @return bool
+ * @since 0.3.0
+ *
+ * @param bool $echo
+ * @return string
  */
-function QmConfSys($param)
-{
-    static $confSys;
-	
-	if(file_exists(PATH_SYS.'configSystem.php') )
-    {
-        if(empty($confSys)){
-            $confSys = include PATH_SYS.'configSystem.php';
-        }
-        $config = $confSys;
+function selfUrl($echo=true) {
+    $url  = @( $_SERVER["HTTPS"] != 'on' ) ? 'http://'.$_SERVER["SERVER_NAME"] :  'https://'.$_SERVER["SERVER_NAME"];
+    $url .= ( $_SERVER["SERVER_PORT"] !== 80 ) ? ":".$_SERVER["SERVER_PORT"] : "";
+    $url .= $_SERVER["REQUEST_URI"];
 
-		if( array_key_exists($param, $config) ){ 
-	    	return $config[$param];
-	    }else{
-	    	return false; 
-	    }
-	}
-}
-
-
-
-/* *****************************************************************************************
-
-                                    SHOW ERROR FUNCTIONS 
-
-   ************************************************************************************** */
-/** Функции вывода ошибок при включеном моде дебага */
-function errorFileExists($file = null)
-{
-    //$titleError = (!is_null($titleError)) ? $titleError : '';
-    $file = (!is_null($file)) ? $file : '';
-    $appMode = QmConf('appMode');
-    if($appMode == 'debug')
-    {
-        print(errorStyle('Файл не найден ',' [ <b>'.$file.'</b> ] не существует!'));
-        exit;
-    }
-}
-/** Вызывать сообщение о ошибке */
-function error($titleError, $text = null)
-{
-    if(QmConf('appMode') == 'debug')
-    {
-        print(errorStyle('Вызвана ошибка '.$titleError, $text));
-        exit;
-    }
-}
-/** Вызывать сообщение о ошибке */
-function QmError($titleError, $text = null)
-{
-    if(QmConf('appMode') == 'debug')
-    {
-        print(errorStyle('Вызвана ошибка '.$titleError, $text));
-        exit;
-    }
-}
-/** Общий стиль для вывода ошибок */
-function errorStyle($titleError = null, $text)
-{
-    return '
-    <html>
-    <head>
-    <meta charset="utf-8">
-    <style type="text/css">
-    body{
-        background: #3C3F41;
-    }
-    </style>
-    </head>
-        <body>
-
-
-    <div style="background: #2B2B2B; color: #9C9C9C; font-family: consolas, courier new; padding: 10px 20px; ">
-        <h2>РЕЖИМ ОТЛАДКИ: '.$titleError.'</h2>
-
-
-        <code style="background: #3C3F41; color: #CC7832; padding: 5px 3px; margin: 0 auto 25px; display: block;">
-            '.$text.'
-        </code>
-
-        <hr style=" height: 1px; border:none; background: #f7002b;">
-        <small>Qm Framework version 0.1. DeBug Mode ON. </small>
-    </div>
-
-        </body>
-    </html>
-    ';
-}
-
-
-if (!function_exists('isExists')) {
-    /**
-     * verification => ifExists , $function='isset-empty'
-     * Метод проверки данных на существование или дугой тип
-     *
-     * @param string $value Данные что проверяем
-     * @return null
-     * @throws Exception
-     */
-    function isExists($value)
-    {
-        return (isset($value) AND !empty($value)) ? $value : null;
-    }
-}
-
-if (!function_exists('isEcho')) {
-    /**
-     * Метод проверки данных на существование или дугой тип
-     *
-     * @param string    $value  Данные для вывода
-     * @param bool      $e
-     * @return null
-     */
-    function isEcho($value, $e=true)
-    {
-        if($e)
-            echo (isset($value)) ? $value : null;
-        else
-            return (isset($value)) ? $value : null;
-    }
+    if ($echo)
+        echo $url;
+    else
+        return $url;
 }
